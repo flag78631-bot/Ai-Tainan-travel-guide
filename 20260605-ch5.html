@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP飲品管理系統</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+    <style>
+        :root {
+            /* ERP色系 */
+
+            --primary-color: #1F3A5F;
+            --secondary-color: #4A6FA5;
+
+            --bg-main: #F4F6F9;
+            --bg-sub: #E9EEF5;
+
+            --text-main: #212529;
+            --text-sub: #6C757D;
+
+            --border-active: #AAB7C4;
+
+            --shadow-main: rgba(0, 0, 0, .15);
+        }
+
+        body {
+            background-color: var(--bg-main);
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .display-3 {
+            color: var(--primary-color);
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            background-color: white;
+            box-shadow: 0 5px 15px var(--shadow-main);
+        }
+
+        caption {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        thead {
+            font-size: 18px;
+        }
+
+        tbody tr:hover {
+            transform: scale(1.01);
+            transition: .2s;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        @media screen and (max-width:768px) {
+
+            .table-rwd thead,
+            caption {
+                display: none;
+            }
+
+            .table-rwd tbody tr {
+                display: block;
+                margin-top: 15px;
+                border: 2px solid var(--border-active);
+                border-radius: 10px;
+                background-color: white;
+            }
+
+            .table-rwd tbody tr td {
+                display: block;
+                overflow: hidden;
+            }
+
+            .table-rwd tbody tr td::before {
+                content: attr(data-th)" : ";
+                font-size: 18px;
+                font-weight: bold;
+                color: var(--primary-color);
+                display: block;
+                float: left;
+                width: 35%;
+                text-align: right;
+                padding-right: 1em;
+            }
+
+            .table-rwd tbody tr td span {
+                display: block;
+                float: left;
+                width: 65%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="display-3 text-center">
+            <i class="fa-solid fa-mug-straw"></i>
+            手搖飲ERP商品管理系統
+        </div>
+
+        <table class="table table-bordered table-hover table-rwd">
+
+            <caption>表1.1 手搖飲商品資料表</caption>
+
+            <thead class="table-dark">
+                <tr>
+                    <th>產品編號</th>
+                    <th>產品品名</th>
+                    <th>產品價格</th>
+                    <th>庫存數量</th>
+                    <th>產品備註</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td data-th="產品編號"><span>D001</span></td>
+                    <td data-th="產品品名"><span>珍珠奶茶</span></td>
+                    <td data-th="產品價格"><span>60</span></td>
+                    <td data-th="庫存數量"><span>120</span></td>
+                    <td data-th="產品備註"><span>熱銷商品</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D002</span></td>
+                    <td data-th="產品品名"><span>波霸紅茶拿鐵</span></td>
+                    <td data-th="產品價格"><span>75</span></td>
+                    <td data-th="庫存數量"><span>95</span></td>
+                    <td data-th="產品備註"><span>人氣推薦</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D003</span></td>
+                    <td data-th="產品品名"><span>四季春青茶</span></td>
+                    <td data-th="產品價格"><span>35</span></td>
+                    <td data-th="庫存數量"><span>210</span></td>
+                    <td data-th="產品備註"><span>無糖首選</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D004</span></td>
+                    <td data-th="產品品名"><span>冬瓜檸檬</span></td>
+                    <td data-th="產品價格"><span>55</span></td>
+                    <td data-th="庫存數量"><span>180</span></td>
+                    <td data-th="產品備註"><span>夏季限定</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D005</span></td>
+                    <td data-th="產品品名"><span>百香綠茶</span></td>
+                    <td data-th="產品價格"><span>50</span></td>
+                    <td data-th="庫存數量"><span>135</span></td>
+                    <td data-th="產品備註"><span>酸甜口感</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D006</span></td>
+                    <td data-th="產品品名"><span>芋頭鮮奶</span></td>
+                    <td data-th="產品價格"><span>85</span></td>
+                    <td data-th="庫存數量"><span>80</span></td>
+                    <td data-th="產品備註"><span>每日限量</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D007</span></td>
+                    <td data-th="產品品名"><span>黑糖鮮奶</span></td>
+                    <td data-th="產品價格"><span>90</span></td>
+                    <td data-th="庫存數量"><span>65</span></td>
+                    <td data-th="產品備註"><span>熱門商品</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D008</span></td>
+                    <td data-th="產品品名"><span>金萱烏龍</span></td>
+                    <td data-th="產品價格"><span>40</span></td>
+                    <td data-th="庫存數量"><span>220</span></td>
+                    <td data-th="產品備註"><span>茶香濃郁</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D009</span></td>
+                    <td data-th="產品品名"><span>葡萄柚綠茶</span></td>
+                    <td data-th="產品價格"><span>65</span></td>
+                    <td data-th="庫存數量"><span>90</span></td>
+                    <td data-th="產品備註"><span>果香系列</span></td>
+                </tr>
+
+                <tr>
+                    <td data-th="產品編號"><span>D010</span></td>
+                    <td data-th="產品品名"><span>蜂蜜檸檬</span></td>
+                    <td data-th="產品價格"><span>70</span></td>
+                    <td data-th="庫存數量"><span>105</span></td>
+                    <td data-th="產品備註"><span>養生飲品</span></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
+```
