@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人首頁</title>
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/my.css">
+    <style>
+        :root {
+
+            /* =========================
+       品牌色 Brand Colors
+    ========================= */
+
+            /* 主色：專業科技藍 */
+            --primary-color: #2563eb;
+
+            /* 輔色：青藍點綴 */
+            --secondary-color: #06b6d4;
+
+
+            /* =========================
+       背景色 Background
+    ========================= */
+
+            /* 網站主背景 */
+            --bg-primary: #f8fafc;
+
+            /* 區塊背景 */
+            --bg-secondary: #eef2f7;
+
+
+            /* =========================
+       內容框 / 卡片
+    ========================= */
+
+            /* 履歷卡片、作品集區塊 */
+            --card-bg: #ffffff;
+
+            /* 邊框色 */
+            --card-border: #dbe4ee;
+
+
+            /* =========================
+       文字色 Text
+    ========================= */
+
+            /* 主要文字 */
+            --text-primary: #0f172a;
+
+            /* 次要文字 */
+            --text-secondary: #64748b;
+
+            /* 反白文字 */
+            --text-light: #ffffff;
+
+
+            /* =========================
+       導覽列 Navbar
+    ========================= */
+
+            --navbar-bg: #ffffff;
+            --navbar-text: #0f172a;
+            --navbar-hover: #2563eb;
+
+
+            /* =========================
+       按鈕 Button
+    ========================= */
+
+            --btn-primary: #2563eb;
+            --btn-secondary: #06b6d4;
+
+            --btn-primary-hover: #1d4ed8;
+            --btn-secondary-hover: #0891b2;
+
+            --btn-text: #ffffff;
+
+
+            /* =========================
+       狀態色 Status
+    ========================= */
+
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        body{
+            background-color: var(--bg-primary);
+        }
+        .s01{
+            background-color: var(--bg-secondary);
+            height: 100vh;
+            position:relative
+        }
+        .s01 .box01{
+            width: 200px;
+            height: 200px;
+            background-color: var(--btn-primary);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .s01 .box02{
+            width: 200px;
+            height: 200px;
+            background-color: var(--btn-primary);
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .s01 .box03{
+            width: 200px;
+            height: 200px;
+            background-color: var(--btn-primary);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .s01 .box04{
+            width: 200px;
+            height: 200px;
+            background-color: var(--btn-primary);
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+        .s01 .userImg{
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            bottom: 100px;
+            right: 100px;
+            background-color: var(--btn-secondary-hover);
+            background-image: url(image/man.jpg);
+            background-position: center -300px;
+            background-size: cover;
+            border-radius: 10px;
+            box-shadow: var(--navbar-text);
+        }
+        .userText{
+            position: absolute;
+            top: 70%;
+            left: 10%;
+            right: 65%;
+        }
+        /* s02作品區 */
+        .s02{
+            padding: 80px 10%;
+            background-color: var(--bg-secondary);
+            text-align: center;
+        }
+        .s02 h2{
+            font-size: 36px;
+        }
+        .s02 .card{
+            display: inline-block;
+            margin: 15px;
+            width: 240px;
+            background-color: var(--btn-primary);
+            padding: 20px;
+            text-align: left;
+            border-radius: 8px;
+        }
+        .s02 .card h3{
+            color: var(--btn-text);
+            margin-top: 0;
+        }
+        .s02 .card p{
+            color: var(--btn-text);
+            line-height: 1.5;
+        }
+        .s02 .card a{
+            background-color: var(--btn-secondary);
+            text-decoration: none;
+            padding: 15px 10px;
+            border-radius: 8px;
+        }
+        .s02 .card a:hover{
+            background-color: var(--btn-secondary-hover);
+            text-decoration: none;
+            padding: 15px 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="s01">
+        <div class="box01"></div>
+        <div class="box02"></div>
+        <div class="box03"></div>
+        <div class="box04"></div>
+        <div class="userImg"></div>
+        <div class="userText">
+            <h1>梁柏豪履歷</h1>
+            <hr>
+            <h2>應徵職位:軟體工程師</h2>
+            <P>座右銘:無派女友幫助並在台北共同，描述唯一代表網通看見文學神話密碼專業，一句也不大師，中文如果心裡，靈魂大。</P>
+        </div>
+    </section>
+    <section class="s02">
+        <h2>我的作品</h2>
+        <!-- 作品1 -->
+        <div class="card">
+            <h3>運動品牌網站</h3>
+            <p>使用HTML.CSS.Javascript製作頁面</p>
+            <a href="202605271.html" target="_blank">查看作品</a>
+        </div>
+        <!-- 作品2 -->
+        <div class="card">
+            <h3>chatpgt</h3>
+            <p>使用大數據 建立模型供用戶問問題</p>
+            <a href="https://chatgpt.com/" target="_blank">查看作品</a>
+        </div>
+        <!-- 作品3 -->
+        <div class="card">
+            <h3>table排版</h3>
+            <p>使用HTML.CSS.Javascript製作表格</p>
+            <a href="20260605-ch5-ai.html">查看作品</a>
+    </section>
+</body>
+
+</html>
