@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>opendata-地方美食</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/my.css">
+    <style>
+        @media screen and (max-width:768px) {
+
+            .table-rwd thead,
+            caption {
+                display: none;
+            }
+
+            .table-rwd tbody tr {
+                display: block;
+                margin-top: 15px;
+                border: 2px solid var(--border-active);
+                border-radius: 5px;
+            }
+
+            .table-rwd tbody tr td {
+                display: block;
+                /* 避免跑版 溢位 */
+                overflow: hidden;
+            }
+
+            /* 偽元素 */
+            .table-rwd tbody tr td::before {
+                content: attr(data-th) " : ";
+                font-size: 20px;
+                font-weight: bold;
+                color: var(--primary-color);
+                display: block;
+                float: left;
+                width: 30%;
+                text-align: right;
+                padding-right: 1em;
+            }
+
+            .table-rwd tbody tr td span {
+                display: block;
+                float: left;
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="display-3 text-center fw-900">opendata-地方美食</div>
+        <table class="table mt-3 table-bordered table-hover table-rwd">
+            <thead class="table-dark">
+                <tr>
+                    <th width:15%>名稱</th>
+                    <th width:20%>地址</th>
+                    <th width:20%>email</th>
+                    <th width:15%>電話</th>
+                    <th width:30%>簡介</th>
+                </tr>
+            </thead>
+            <tbody id="myBody">
+                <tr>
+                    <td data-th="名稱"><span>三富休閒農場(紫森林)</span></td>
+                    <td data-th="地址"><span>中山村新寮二路161巷88號</span></td>
+                    <td data-th="email"><span>sanfufarm@gmail.com</span></td>
+                    <td data-th="電話"><span>03-958-8690</span></td>
+                    <td data-th="簡介">
+                        <span>【目前僅開放住客入園，暫停一日遊及入園參觀】\r\n三富休閒農場設立於1989年，佔地面積約14公頃，緊鄰仁山植物園及新寮瀑布，景緻天然怡人，生態景觀豐富而特殊，四季各具不同風情，營業項目有：特色餐飲、休..."</span>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-4.0.0.js"></script>
+    <script>
+        $(function () {
+            //載入資料
+            $.ajax({
+                type: "GET",
+                url: "https://data.moa.gov.tw/Service/OpenData/ODwsv/ODwsvTravelFood.aspx?IsTransData=1&UnitId=193",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    const cleandata = data.map(function (item) {
+                        let name = (item.Name ?? "").trim();
+                        if (name == "") {
+                            name = "未提供名稱";
+                        }
+                        let address = (item.Address ?? "").trim();
+                        if (address == "") {
+                            address = "未提供地址";
+                        }
+                        let town = (item.Town ?? "").trim();
+                        if (town == "") {
+                            town = "未提供地址";
+                        }
+                        let city = (item.City ?? "").trim();
+                        if (city == "") {
+                            city = "未提供地址";
+                        }
+                        
+                        let email = (item.Email ?? "").trim();
+                        if (email == "") {
+                            email = "未提供email";
+                        }
+                        let tel = (item.Tel ?? "").trim();
+                        if (tel == "") {
+                            tel = "未提供電話";
+                        }
+                        let words = (item.HostWords ?? "").trim();
+                        if (words == "") {
+                            words = "未提供說明";
+                        }
+                        return {
+                            name: name,
+                            address: city+town+address,
+                            email: email,
+                            tel: tel,
+                            words: words,
+                        }
+                    });
+                    console.log("清洗後的資料", cleandata);
+
+                    //將請洗後的資料渲染至table
+                    $("#myBody").empty(); //將最上層的tbody刪除
+                    cleandata.forEach(function (item){
+                        let strHTML =`<tr >
+                                       <td data-th="名稱"><span>${item.name}</span></td>
+                                       <td data-th="地址"><span>${item.address}</span></td>
+                                       <td data-th="email"><span>${item.email}</span></td>
+                                       <td data-th="電話"><span>${item.tel}</span></td>
+                                       <td data-th="簡介"><span>${item.words}</span>
+                                        </td>
+                                   </tr>`;//渲染帶兩個小點 要記得加``
+                        $("#myBody").append(strHTML)
+                    });
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        })
+    </script>
+
+</body>
+
+</html>
