@@ -4,236 +4,417 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人首頁</title>
-    <link rel="stylesheet" href="css/all.min.css">
+    <title>梁柏豪 | 軟體工程師前端履歷</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/my.css">
     <style>
         :root {
-
             /* =========================品牌色 Brand Colors========================= */
-
-            /* 主色：專業科技藍 */
-            --primary-color: #2563eb;
-
-            /* 輔色：青藍點綴 */
-            --secondary-color: #06b6d4;
-
+            --primary-color: #3b82f6;
+            /* 調整為亮藍，確保暗色背景下的文字與Icon清晰度 */
+            --secondary-color: #38bdf8;
+            /* 天空藍點綴，提升科技感 */
+            --accent-color: #60a5fa;
+            /* 亮藍色互動 */
 
             /* =========================背景色 Background========================= */
-
-            /* 網站主背景 */
-            --bg-primary: #f8fafc;
-
-            /* 區塊背景 */
-            --bg-secondary: #eef2f7;
-
+            --bg-primary: #0f172a;
+            /* 極致深藍（主背景） */
+            --bg-secondary: #1e293b;
+            /* 次要區塊暗藍 */
 
             /* =========================內容框 / 卡片========================= */
-
-            /* 履歷卡片、作品集區塊 */
-            --card-bg: #ffffff;
-
-            /* 邊框色 */
-            --card-border: #dbe4ee;
-
+            --card-bg: rgba(30, 41, 59, 0.7);
+            /* 卡片背景帶透明 */
+            --card-border: rgba(51, 65, 85, 0.8);
+            /* 卡片邊框 */
 
             /* =========================文字色 Text========================= */
-
-            /* 主要文字 */
-            --text-primary: #0f172a;
-
-            /* 次要文字 */
-            --text-secondary: #64748b;
-
-            /* 反白文字 */
+            --text-primary: #f1f5f9;
+            /* 主要亮白字 */
+            --text-secondary: #94a3b8;
+            /* 次要冷灰字 */
             --text-light: #ffffff;
 
-
-            /* =========================導覽列 Navbar========================= */
-
-            --navbar-bg: #ffffff;
-            --navbar-text: #0f172a;
-            --navbar-hover: #2563eb;
-
-
             /* =========================按鈕 Button========================= */
-
             --btn-primary: #2563eb;
-            --btn-secondary: #06b6d4;
-
             --btn-primary-hover: #1d4ed8;
-            --btn-secondary-hover: #0891b2;
-
             --btn-text: #ffffff;
+        }
 
-
-            /* =========================狀態色 Status========================= */
-
-            --success-color: #22c55e;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
+        /* 全域重設 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             background-color: var(--bg-primary);
+            font-family: 'Segoe UI', Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            color: var(--text-primary);
+            line-height: 1.7;
+            /* 稍微拉大行高提升閱讀舒適度 */
         }
 
+        /* =========================
+           s01 英雄主視覺區 
+        ========================= */
         .s01 {
-            background-color: var(--bg-secondary);
-            height: 100vh;
-            position: relative
+            background: radial-gradient(circle at 80% 20%, #1e3a8a 0%, var(--bg-primary) 60%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .s01 .box01 {
-            width: 200px;
-            height: 200px;
-            background-color: var(--btn-primary);
+        /* 四個角落的裝飾科技線條 */
+        .tech-corner {
             position: absolute;
-            top: 0;
-            left: 0;
+            width: 30px;
+            height: 30px;
+            border-color: var(--secondary-color);
+            border-style: solid;
+            opacity: 0.5;
+            transition: all 0.3s ease;
         }
 
-        .s01 .box02 {
-            width: 200px;
-            height: 200px;
-            background-color: var(--btn-primary);
-            position: absolute;
-            top: 0;
-            right: 0;
+        .top-left { top: 30px; left: 30px; border-width: 3px 0 0 3px; }
+        .top-right { top: 30px; right: 30px; border-width: 3px 3px 0 0; }
+        .bottom-left { bottom: 30px; left: 30px; border-width: 0 0 3px 3px; }
+        .bottom-right { bottom: 30px; right: 30px; border-width: 0 3px 3px 0; }
+
+        /* 履歷主卡片 */
+        .profile-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            max-width: 1050px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
         }
 
-        .s01 .box03 {
-            width: 200px;
-            height: 200px;
-            background-color: var(--btn-primary);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-        }
-
-        .s01 .box04 {
-            width: 200px;
-            height: 200px;
-            background-color: var(--btn-primary);
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
-
-        .s01 .userImg {
-            position: absolute;
-            top: 100px;
-            left: 100px;
-            bottom: 100px;
-            right: 100px;
-            background-color: var(--btn-secondary-hover);
-            background-image: url(image/man.jpg);
-            background-position: center -300px;
+        /* 左側大圖區 */
+        .userImg {
+            flex: 1;
+            min-height: 500px;
+            background-image: url('image/man.jpg');
+            background-position: center;
             background-size: cover;
-            border-radius: 10px;
-            box-shadow: var(--navbar-text);
+            position: relative;
         }
 
-        .userText {
+        /* 遮罩漸層：優化暗色模式的融合感 */
+        .userImg::after {
+            content: '';
             position: absolute;
-            top: 70%;
-            left: 10%;
-            right: 65%;
+            inset: 0;
+            background: linear-gradient(to right, transparent 40%, rgba(30, 41, 59, 0.95) 100%);
         }
 
-        /* s02作品區 */
+        /* 右側文字資訊區 */
+        .userText {
+            flex: 1.3;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .userText h1 {
+            font-size: 2.8rem;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .userText .title-tag {
+            display: inline-block;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .userText hr {
+            border: none;
+            border-top: 3px solid var(--secondary-color);
+            margin-bottom: 25px;
+            width: 60px;
+            border-radius: 2px;
+        }
+
+        .userText p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        /* 技能分類標題 */
+        .skills-title {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* 個人核心技術標籤組 */
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .skills-tags span {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--secondary-color);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 4px 14px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .skills-tags span:hover {
+            background-color: rgba(56, 189, 248, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        /* 聯絡按鈕區 */
+        .contact-links {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .contact-links .email-btn {
+            color: var(--secondary-color);
+        }
+
+        .contact-links .github-btn {
+            color: var(--text-secondary);
+        }
+
+        .contact-links a:hover {
+            color: var(--text-light);
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           s02 作品集區 
+        ========================= */
         .s02 {
-            padding: 80px 10%;
+            padding: 90px 5%;
             background-color: var(--bg-secondary);
             text-align: center;
         }
 
         .s02 h2 {
-            font-size: 36px;
+            font-size: 2.2rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .s02 h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background-color: var(--btn-primary);
+            margin: 15px auto 50px auto;
+            border-radius: 2px;
+        }
+
+        /* 作品集網格系統 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .s02 .card {
-            display: inline-block;
-            margin: 15px;
-            width: 240px;
-            height: 150px;
-            background-color: var(--btn-primary);
-            padding: 20px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--card-border);
+            padding: 35px 28px;
             text-align: left;
-            border-radius: 8px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 260px;
+        }
+
+        .s02 .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--secondary-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.15);
         }
 
         .s02 .card h3 {
-            color: var(--btn-text);
-            margin-top: 0;
+            color: var(--text-light);
+            font-size: 1.35rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .s02 .card h3 i {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
         }
 
         .s02 .card p {
-            color: var(--btn-text);
-            line-height: 1.5;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
         }
 
         .s02 .card a {
-            background-color: var(--btn-secondary);
+            background-color: var(--btn-primary);
+            color: var(--btn-text);
             text-decoration: none;
-            padding: 15px 10px;
+            padding: 10px 22px;
             border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            margin-top: auto;
         }
 
         .s02 .card a:hover {
-            background-color: var(--btn-secondary-hover);
-            text-decoration: none;
-            padding: 15px 10px;
-            border-radius: 8px;
+            background-color: var(--btn-primary-hover);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* =========================
+           RWD 響應式斷點 
+        ========================= */
+        @media screen and (max-width: 992px) {
+            .profile-container {
+                flex-direction: column;
+                max-width: 650px;
+            }
+
+            .userImg {
+                min-height: 350px;
+            }
+
+            .userImg::after {
+                background: linear-gradient(to top, rgba(30, 41, 59, 1) 10%, transparent 100%);
+            }
+
+            .userText {
+                padding: 40px 30px;
+            }
+
+            .tech-corner {
+                display: none; /* 行動裝置隱藏裝飾線條避免干擾 */
+            }
         }
     </style>
 </head>
 
 <body>
     <section class="s01">
-        <div class="box01"></div>
-        <div class="box02"></div>
-        <div class="box03"></div>
-        <div class="box04"></div>
-        <div class="userImg"></div>
-        <div class="userText">
-            <h1>梁柏豪履歷</h1>
-            <hr>
-            <h2>應徵職位:軟體工程師</h2>
-            <P>座右銘:無派女友幫助並在台北共同，描述唯一代表網通看見文學神話密碼專業，一句也不大師，中文如果心裡，靈魂大。</P>
+        <div class="tech-corner top-left"></div>
+        <div class="tech-corner top-right"></div>
+        <div class="tech-corner bottom-left"></div>
+        <div class="tech-corner bottom-right"></div>
+
+        <div class="profile-container">
+            <div class="userImg"></div>
+            <div class="userText">
+                <h1>梁柏豪</h1>
+                <div class="title-tag">應徵職位：前端工程師 / 軟體工程師</div>
+                <hr>
+                <p>
+                    熱衷於打造高效能、高互動性的 Web 應用程式。具備將 UI/UX 設計稿精準還原為語意化與無障礙網頁程式碼的能力，並熟悉利用非同步請求（AJAX/Fetch）串接 RESTful API 進行動態資料優化與渲染。重視程式碼之可維護性、模組化與響應式排版（RWD）。目前專注於現代化前端技術，期待加入技術團隊協作，貢獻即戰力並持續精進。
+                </p>
+                
+                <div class="skills-title"><i class="fa-solid fa-code"></i> 核心技術標籤</div>
+                <div class="skills-tags">
+                    <span>HTML5 / CSS3</span>
+                    <span>JavaScript (ES6+)</span>
+                    <span>Bootstrap 5</span>
+                    <span>AJAX / JSON</span>
+                    <span>Responsive Web Design (RWD)</span>
+                    <span>Git / GitHub</span>
+                    <span>Flexbox & CSS Grid</span>
+                </div>
+                
+                <div class="contact-links">
+                    <a href="mailto:flag78631@gmail.com" class="email-btn">
+                        <i class="fa-solid fa-envelope"></i> 信箱聯繫
+                    </a>
+                    <a href="https://github.com/flag78631-bot/userpage" target="_blank" class="github-btn">
+                        <i class="fa-brands fa-github"></i> GitHub 原始碼
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
+
     <section class="s02">
-        <h2>我的作品</h2>
-        <!-- 作品1 -->
-        <div class="card">
-            <h3>運動品牌網站</h3>
-            <p>使用HTML.CSS.Javascript製作頁面</p>
-            <a href="20260527-1.html" target="_blank">查看作品</a>
-        </div>
-        <!-- 作品2 -->
-        <div class="card">
-            <h3>table排版</h3>
-            <p>使用HTML.CSS.Javascript製作表格</p>
-            <a href="20260605-ch5-1.html" target="_blank">查看作品</a>
-        </div>
-        <!-- 作品3 -->
-        <div class="card">
-            <h3>opendata-地方美食</h3>
-            <p>利用 AJAX 串接政府 Open Data，進行資料清洗與動態網頁渲染。</p>
-            <a href="20260609travelfood.html" target="_blank">查看作品</a>
-        </div>
-        <!-- 作品4 -->
-        <div class="card">
-            <h3>時間軸呈現</h3>
-            <p>使用HTML.CSS.Javascript, 以時間軸呈現旅遊行程方案</p>
-            <a href="20260623-ch7 timelineSection-1.html" target="_blank">查看作品</a>
-        </div>
-        <!-- 作品5 -->
-        <div class="card">
-            <h3>表單製作</h3>
-            <p>使用HTML.CSS.Javascript, 製作表單</p>
-            <a href="20260625-ch11-form-1.html" target="_blank">查看作品</a>
+        <h2>工程作品集</h2>
+        <div class="portfolio-grid">
+            <div class="card">
+                <h3><i class="fa-solid fa-store"></i> 運動品牌響應式網站</h3>
+                <p>運用 HTML5、CSS3 與原生 JavaScript 撰寫之電商首頁。實作動態互動特效、高性能圖片輪播組件，並全面優化跨裝置的 RWD 使用者體驗。</p>
+                <a href="20260527-1.html" target="_blank">檢視專案 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-table-list"></i> 資料網格數據排版系統</h3>
+                <p>結合語意化 Table 結構與現代化 Flexbox 佈局，建構大數據報表。重視 CSS 架構與元件重用性，實現極致清晰、易於閱讀的數據視覺化呈現。</p>
+                <a href="20260605-ch5-1.html" target="_blank">檢視專案 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-map-location-dot"></i> OpenData 地方美食地圖</h3>
+                <p>使用異步 Fetch/AJAX 技術串接政府開放資料（JSON 格式）。前端獨立實作資料清洗、關鍵字過濾演算法，並達成高效率的動態 DOM 節點渲染。</p>
+                <a href="20260609travelfood.html" target="_blank">檢視專案 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-timeline"></i> 互動式旅遊時空時間軸</h3>
+                <p>精確掌握 CSS 偽元素（::before, ::after）與動態過渡（Transition）特效。精心打造極具微互動故事感的導覽方案，兼顧視覺美感與流暢度。</p>
+                <a href="20260623-ch7 timelineSection-1.html" target="_blank">檢視專案 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-id-card-clip"></i> 動態互動表單智能驗證</h3>
+                <p>深度結合網頁表單元件與原生 JavaScript 邏輯，利用正則表達式（RegEx）進行嚴謹的前端即時欄位阻擋與驗證，顯著優化錯誤提示與填表體驗。</p>
+                <a href="20260625-ch11-form-1.html" target="_blank">檢視專案 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
         </div>
     </section>
 </body>
