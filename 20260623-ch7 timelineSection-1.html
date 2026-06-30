@@ -127,197 +127,92 @@
             background: rgba(125, 211, 252, .18);
         }
 
-        /* 先把原本公司文字藏掉 */
-        .textbox .h2,
-        .textbox p {
-            color: transparent;
-            font-size: 0;
-            line-height: 0;
-            margin: 0;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* 旅遊卡主標題 */
-        .textbox .h2::before {
-            display: block;
+        /* 旅遊卡主標題樣式 */
+        .textbox .h2 {
             font-size: 1.9rem;
             line-height: 1.3;
             font-weight: 900;
             margin-bottom: 14px;
-            color: #1e293b;
             text-shadow: 0 2px 0 rgba(255, 255, 255, .6);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 內容文字基礎段落樣式 */
+        .textbox p {
+            font-size: 1rem;
+            white-space: pre-line; /* 保持 HTML 內的換行 */
+            position: relative;
+            z-index: 2;
         }
 
         /* 第一段：小吃 / 地點 */
-        .textbox p:first-of-type::before {
-            display: block;
-            font-size: 1rem;
+        .textbox p:first-of-type {
             line-height: 1.85;
             color: #475569;
             margin-bottom: 10px;
-            white-space: pre-line;
         }
 
         /* 第二段：行程 / 人數 / 花費 */
-        .textbox p:last-of-type::before {
-            display: block;
-            font-size: 1rem;
+        .textbox p:last-of-type {
             line-height: 1.9;
             color: #334155;
-            white-space: pre-line;
+            margin-bottom: 0;
         }
 
         /* =========================
-   卡片 1：日本
-========================= */
+           個別卡片主題色設定
+        ========================= */
+        /* 卡片 1：日本 */
         .timeline-section>.row:nth-child(1) .textbox {
             background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(255, 244, 248, .96));
         }
-
-        .timeline-section>.row:nth-child(1) .textbox .h2::before {
-            content: "🇯🇵 日本｜東京 × 鐮倉 輕旅行";
+        .timeline-section>.row:nth-child(1) .textbox .h2 {
             color: #ff4d8d;
         }
 
-        .timeline-section>.row:nth-child(1) .textbox p:first-of-type::before {
-            content:
-                "✦ 當地特色小吃：壽司、拉麵、可麗餅、草莓大福\n"
-                "✦ 必去地點：淺草寺、晴空塔、鎌倉高校前、江之島";
-        }
-
-        .timeline-section>.row:nth-child(1) .textbox p:last-of-type::before {
-            content:
-                "✦ 小行程 1：淺草寺 → 仲見世商店街 → 晴空塔夜景"
-                "✦ 小行程 2：鎌倉大佛 → 江之電散步 → 江之島看夕陽"
-                "✦ 建議旅遊人數：2～4 人"
-                "✦ 總花費：約 NT$35,000～48,000 / 人（5 天 4 夜）";
-        }
-
-        /* =========================
-   卡片 2：美國
-========================= */
+        /* 卡片 2：美國 */
         .timeline-section>.row:nth-child(2) .textbox {
             background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(240, 250, 255, .96));
         }
-
         .timeline-section>.row:nth-child(2) .textbox::before {
             background: rgba(255, 214, 102, .5);
         }
-
-        .timeline-section>.row:nth-child(2) .textbox .h2::before {
-            content: "🇺🇸 美國｜洛杉磯 × 舊金山 城市公路感";
+        .timeline-section>.row:nth-child(2) .textbox .h2 {
             color: #0ea5e9;
         }
 
-        .timeline-section>.row:nth-child(2) .textbox p:first-of-type::before {
-            content:
-                "✦ 當地特色小吃：漢堡、墨西哥捲餅、蛤蜊巧達湯、酸種麵包"
-                "✦ 必去地點：好萊塢星光大道、金門大橋、漁人碼頭、九曲花街";
-        }
-
-        .timeline-section>.row:nth-child(2) .textbox p:last-of-type::before {
-            content:
-                "✦ 小行程 1：比佛利山 → 格里斐斯天文台 → 聖塔莫尼卡海灘"
-                "✦ 小行程 2：金門大橋騎單車 → 漁人碼頭 → 看灣區夕陽"
-                "✦ 建議旅遊人數：3～5 人"
-                "✦ 總花費：約 NT$75,000～110,000 / 人（7 天 6 夜）";
-        }
-
-        /* =========================
-   卡片 3：澳洲
-========================= */
+        /* 卡片 3：澳洲 */
         .timeline-section>.row:nth-child(3) .textbox {
             background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(242, 255, 247, .96));
         }
-
         .timeline-section>.row:nth-child(3) .textbox::before {
             background: rgba(134, 239, 172, .45);
         }
-
-        .timeline-section>.row:nth-child(3) .textbox .h2::before {
-            content: "🇦🇺 澳洲｜雪梨 × 藍山 自然系慢旅行";
+        .timeline-section>.row:nth-child(3) .textbox .h2 {
             color: #10b981;
         }
 
-        .timeline-section>.row:nth-child(3) .textbox p:first-of-type::before {
-            content:
-                "✦ 當地特色小吃：肉派、炸魚薯條、澳式早午餐、Lamington 蛋糕"
-                "\n✦ 必去地點：雪梨歌劇院、港灣大橋、藍山國家公園、邦代海灘";
-        }
-
-        .timeline-section>.row:nth-child(3) .textbox p:last-of-type::before {
-            content:
-                "✦ 小行程 1：歌劇院拍照 → 環形碼頭散步 → 達令港夜景"
-                "✦ 小行程 2：藍山三姊妹岩 → 纜車 → 森林步道健行"
-                "✦ 建議旅遊人數：2～4 人"
-                "✦ 總花費：約 NT$60,000～88,000 / 人（6 天 5 夜）";
-        }
-
-        /* =========================
-   卡片 4：法國
-========================= */
+        /* 卡片 4：法國 */
         .timeline-section>.row:nth-child(4) .textbox {
             background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(255, 249, 240, .96));
         }
-
         .timeline-section>.row:nth-child(4) .textbox::before {
             background: rgba(251, 191, 36, .38);
         }
-
-        .timeline-section>.row:nth-child(4) .textbox .h2::before {
-            content: "🇫🇷 法國｜巴黎 × 凡爾賽 經典浪漫路線";
+        .timeline-section>.row:nth-child(4) .textbox .h2 {
             color: #f97316;
         }
 
-        .timeline-section>.row:nth-child(4) .textbox p:first-of-type::before {
-            content:
-                "✦ 當地特色小吃：可頌、法式洋蔥湯、馬卡龍、可麗餅"
-                "✦ 必去地點：艾菲爾鐵塔、羅浮宮、塞納河、凡爾賽宮";
-        }
-
-        .timeline-section>.row:nth-child(4) .textbox p:last-of-type::before {
-            content:
-                "✦ 小行程 1：羅浮宮 → 杜樂麗花園 → 香榭大道夜拍"
-                "✦ 小行程 2：凡爾賽宮一日遊 → 塞納河遊船晚餐"
-                "✦ 建議旅遊人數：2～4 人"
-                "✦ 總花費：約 NT$85,000～120,000 / 人（7 天 6 夜）";
-        }
-
-        /* =========================
-   卡片 5：英國
-========================= */
+        /* 卡片 5：英國 */
         .timeline-section>.row:nth-child(5) .textbox {
             background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(245, 244, 255, .96));
         }
-
         .timeline-section>.row:nth-child(5) .textbox::before {
             background: rgba(167, 139, 250, .28);
         }
-
-        .timeline-section>.row:nth-child(5) .textbox .h2::before {
-            content: "🇬🇧 英國｜倫敦 × 劍橋 經典城市散步";
+        .timeline-section>.row:nth-child(5) .textbox .h2 {
             color: #7c3aed;
-        }
-
-        .timeline-section>.row:nth-child(5) .textbox p:first-of-type::before {
-            content:
-                "✦ 當地特色小吃：炸魚薯條、英式早餐、司康、牛肉派"
-                "✦ 必去地點：大笨鐘、倫敦眼、白金漢宮、劍橋國王學院";
-        }
-
-        .timeline-section>.row:nth-child(5) .textbox p:last-of-type::before {
-            content:
-                "✦ 小行程 1：西敏寺 → 大笨鐘 → 倫敦眼 → 泰晤士河畔散步"
-                "✦ 小行程 2：劍橋一日遊 → 撐篙船 → 學院巡禮"
-                "✦ 建議旅遊人數：2～4 人"
-                "✦ 總花費：約 NT$80,000～115,000 / 人（7 天 6 夜）";
-        }
-
-        /* 英國圖片標籤 */
-        .timeline-section>.row:nth-child(5) .imgbox::before {
-            content: "UNITED KINGDOM";
-            background: linear-gradient(135deg, #8b5cf6, #6366f1);
         }
 
 
@@ -356,7 +251,12 @@
             background: linear-gradient(135deg, #fb923c, #f97316);
         }
 
-        /* 卡片 hover */
+        .timeline-section>.row:nth-child(5) .imgbox::before {
+            content: "UNITED KINGDOM";
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+        }
+
+        /* 卡片 hover 效果 */
         .timeline-section>.row {
             transition: transform .35s ease;
         }
@@ -374,7 +274,7 @@
             transition: .35s;
         }
 
-        /* 平板以下 */
+        /* 平板以下斷點 */
         @media screen and (max-width:992px) {
             .textbox {
                 min-height: auto;
@@ -386,7 +286,7 @@
             }
         }
 
-        /* 手機版 */
+        /* 手機版斷點 */
         @media screen and (max-width:768px) {
             .display-2 {
                 font-size: 2.2rem;
@@ -417,12 +317,11 @@
                 border-radius: 24px;
             }
 
-            .textbox .h2::before {
+            .textbox .h2 {
                 font-size: 1.45rem;
             }
 
-            .textbox p:first-of-type::before,
-            .textbox p:last-of-type::before {
+            .textbox p {
                 font-size: .95rem;
                 line-height: 1.8;
             }
@@ -434,73 +333,93 @@
     <div class="container">
         <div class="display-2 text-center fw-900 text-primary my-4">旅遊行程方案選擇</div>
         <div class="timeline-section">
-            <div class="row align-items-center timeline-section-pointer ">
-                <div class="col-6 ">
+            
+            <!-- 卡片 1：日本 -->
+            <div class="row align-items-center timeline-section-pointer">
+                <div class="col-6">
                     <div class="imgbox bg-cover" style="background-image: url(image/japan.jpg)"></div>
                 </div>
                 <div class="col-6">
                     <div class="textbox">
-                        <div class="h2">1. 公司草創</div>
-                        <p>美女圍繞像是總是描述取消晚上漂亮儘量一件輕輕，一路是啊所謂生意情節婚姻覺得公斤男女，硬盤區別完美進口舉辦二手她說體育資格近年來，備案春節照顧讓我每次，原文車輛期待玩具，你好原料標誌行業並且容量，不懂第二生產傳說和平新型
-                        </p>
-                        <p>第二章，草魚出現在對你心裡行情，此時原料住宅放在將在仍然經常，第一大概居民級別初步跟我西方職責之中湖口，規律研究生，成本提前指導第一個帳號專門病人，不了最後金額建議活力建議帶來廣告。
-                        </p>
+                        <div class="h2">🇯🇵 日本｜東京 × 鐮倉 輕旅行</div>
+                        <p>✦ 當地特色小吃：壽司、拉麵、可麗餅、草莓大福
+                           ✦ 必去地點：淺草寺、晴空塔、鎌倉高校前、江之島</p>
+                        <p>✦ 小行程 1：淺草寺 → 仲見世商店街 → 晴空塔夜景
+                           ✦ 小行程 2：鎌倉大佛 → 江之電散步 → 江之島看夕陽
+                           ✦ 建議旅遊人數：2～4 人
+                           ✦ 總花費：約 NT$35,000～48,000 / 人（5 天 4 夜）</p>
                     </div>
                 </div>
             </div>
+
+            <!-- 卡片 2：美國 -->
             <div class="row align-items-center flex-xl-row-reverse timeline-section-pointer">
                 <div class="col-6">
                     <div class="imgbox bg-cover" style="background-image: url(image/Losangeles.jpg)"></div>
                 </div>
-
-                <div class="col-6 ">
+                <div class="col-6">
                     <div class="textbox">
-                        <div class="h2">2. 公司發展</div>
-                        <p>美女圍繞像是總是描述取消晚上漂亮儘量一件輕輕，一路是啊所謂生意情節婚姻覺得公斤男女，硬盤區別完美進口舉辦二手她說體育資格近年來，備案春節照顧讓我每次，原文車輛期待玩具，你好原料標誌行業並且容量，不懂第二生產傳說和平新型
-                        </p>
-                        <p>第二章，草魚出現在對你心裡行情，此時原料住宅放在將在仍然經常，第一大概居民級別初步跟我西方職責之中湖口，規律研究生，成本提前指導第一個帳號專門病人，不了最後金額建議活力建議帶來廣告。
-                        </p>
+                        <div class="h2">🇺🇸 美國｜洛杉磯 × 舊金山 城市公路感</div>
+                        <p>✦ 當地特色小吃：漢堡、墨西哥捲餅、蛤蜊巧達湯、酸種麵包
+                           ✦ 必去地點：好萊塢星光大道、金門大橋、漁人碼頭、九曲花街</p>
+                        <p>✦ 小行程 1：比佛利山 → 格里斐斯天文台 → 聖塔莫尼卡海灘
+                           ✦ 小行程 2：金門大橋騎單車 → 漁人碼頭 → 看灣區夕陽
+                           ✦ 建議旅遊人數：3～5 人
+                           ✦ 總花費：約 NT$75,000～110,000 / 人（7 天 6 夜）</p>
                     </div>
                 </div>
             </div>
+
+            <!-- 卡片 3：澳洲 -->
             <div class="row align-items-center timeline-section-pointer">
                 <div class="col-6">
                     <div class="imgbox bg-cover" style="background-image: url(image/australia.jpg)"></div>
                 </div>
                 <div class="col-6">
                     <div class="textbox">
-                        <div class="h2">3. 公司擴充</div>
-                        <p>美女圍繞像是總是描述取消晚上漂亮儘量一件輕輕，一路是啊所謂生意情節婚姻覺得公斤男女，硬盤區別完美進口舉辦二手她說體育資格近年來，備案春節照顧讓我每次，原文車輛期待玩具，你好原料標誌行業並且容量，不懂第二生產傳說和平新型
-                        </p>
-                        <p>第二章，草魚出現在對你心裡行情，此時原料住宅放在將在仍然經常，第一大概居民級別初步跟我西方職責之中湖口，規律研究生，成本提前指導第一個帳號專門病人，不了最後金額建議活力建議帶來廣告。
-                        </p>
+                        <div class="h2">🇦🇺 澳洲｜雪梨 × 藍山 自然系慢旅行</div>
+                        <p>✦ 當地特色小吃：肉派、炸魚薯條、澳式早午餐、Lamington 蛋糕
+                           ✦ 必去地點：雪梨歌劇院、港灣大橋、藍山國家公園、邦代海灘</p>
+                        <p>✦ 小行程 1：歌劇院拍照 → 環形碼頭散步 → 達令港夜景
+                           ✦ 小行程 2：藍山三姊妹岩 → 纜車 → 森林步道健行
+                           ✦ 建議旅遊人數：2～4 人
+                           ✦ 總花費：約 NT$60,000～88,000 / 人（6 天 5 夜）</p>
                     </div>
                 </div>
             </div>
+
+            <!-- 卡片 4：法國 -->
             <div class="row align-items-center flex-xl-row-reverse timeline-section-pointer">
                 <div class="col-6">
                     <div class="imgbox bg-cover" style="background-image: url(image/paris.jpg)"></div>
                 </div>
                 <div class="col-6">
                     <div class="textbox">
-                        <div class="h2">4. 公司整合</div>
-                        <p>美女圍繞像是總是描述取消晚上漂亮儘量一件輕輕，一路是啊所謂生意情節婚姻覺得公斤男女，硬盤區別完美進口舉辦二手她說體育資格近年來，備案春節照顧讓我每次，原文車輛期待玩具，你好原料標誌行業並且容量，不懂第二生產傳說和平新型
-                        </p>
-                        <p>第二章，草魚出現在對你心裡行情，此時原料住宅放在將在仍然經常，第一大概居民級別初步跟我西方職責之中湖口，規律研究生，成本提前指導第一個帳號專門病人，不了最後金額建議活力建議帶來廣告。
-                        </p>
+                        <div class="h2">🇫🇷 法國｜巴黎 × 凡爾賽 經典浪漫路線</div>
+                        <p>✦ 當地特色小吃：可頌、法式洋蔥湯、馬卡龍、可麗餅
+                           ✦ 必去地點：艾菲爾鐵塔、羅浮宮、塞納河、凡爾賽宮</p>
+                        <p>✦ 小行程 1：羅浮宮 → 杜樂麗花園 → 香榭大道夜拍
+                           ✦ 小行程 2：凡爾賽宮一日遊 → 塞納河遊船晚餐
+                           ✦ 建議旅遊人數：2～4 人
+                           ✦ 總花費：約 NT$85,000～120,000 / 人（7 天 6 夜）</p>
                     </div>
                 </div>
-
             </div>
+
+            <!-- 卡片 5：英國 -->
             <div class="row align-items-center timeline-section-pointer">
                 <div class="col-6">
                     <div class="imgbox bg-cover" style="background-image: url(image/london.jpg)"></div>
                 </div>
                 <div class="col-6">
                     <div class="textbox">
-                        <div class="h2">5. 英國旅行</div>
-                        <p>英國特色與景點介紹</p>
-                        <p>英國旅遊行程與預算</p>
+                        <div class="h2">🇬🇧 英國｜倫敦 × 劍橋 經典城市散步</div>
+                        <p>✦ 當地特色小吃：炸魚薯條、英式早餐、司康、牛肉派
+                           ✦ 必去地點：大笨鐘、倫敦眼、白金漢宮、劍橋國王學院</p>
+                        <p>✦ 小行程 1：西敏寺 → 大笨鐘 → 倫敦眼 → 泰晤士河畔散步
+                           ✦ 小行程 2：劍橋一日遊 → 撐篙船 → 學院巡禮
+                           ✦ 建議旅遊人數：2～4 人
+                           ✦ 總花費：約 NT$80,000～115,000 / 人（7 天 6 夜）</p>
                     </div>
                 </div>
             </div>
