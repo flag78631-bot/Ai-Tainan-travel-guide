@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap');
+
+:root {
+
+ /* =========================品牌色系 Brand Colors========================== */
+    /* 主色 - 活力橘紅 */
+    --primary-color: #ff5a36;
+
+    /* 輔色 - 運動藍 */
+    --secondary-color: #1f7aff;
+
+
+/* =========================背景色系 Background========================== */
+
+    /* 網站主背景 */
+    --bg-primary: #f7f9fc;
+
+    /* 區塊背景 */
+    --bg-secondary: #ffffff;
+
+    /* 深色區塊背景 */
+    --bg-dark: #101826;
+
+
+/* =========================文字色系 Text========================== */
+
+    /* 主文字 */
+    --text-primary: #1a1f2b;
+
+    /* 次文字 */
+    --text-secondary: #6c7689;
+
+    /* 白色文字 */
+    --text-light: #ffffff;
+
+
+/* =========================導覽列 Navbar========================== */
+
+    /* 選單主色 */
+    --menu-primary: #101826;
+
+    /* 選單輔色 */
+    --menu-secondary: #1d2b44;
+
+    /* 選單文字 */
+    --menu-text: #ffffff;
+
+    /* 選單 Hover */
+    --menu-hover: #ff5a36;
+
+
+/* =========================按鈕 Button========================== */
+
+    /* 主要按鈕 */
+    --btn-primary: #ff5a36;
+
+    /* 次要按鈕 */
+    --btn-secondary: #1f7aff;
+
+    /* 按鈕文字 */
+    --btn-text: #ffffff;
+
+
+/* =========================Hover 狀態========================== */
+
+    /* 主按鈕 Hover */
+    --btn-primary-hover: #e54824;
+
+    /* 輔按鈕 Hover */
+    --btn-secondary-hover: #005ee6;
+
+    /* Hover 文字 */
+    --btn-hover-text: #ffffff;
+
+
+/* =========================邊框 Border========================== */
+
+    --border-color: #dce3ed;
+
+    /* 強調邊框 */
+    --border-active: #ff5a36;
+    --content-bg: #1f2937;
+
+/* =========================狀態色 Status========================== */
+
+    /* 成功 */
+    --success-color: #22c55e;
+
+    /* 警告 */
+    --warning-color: #f59e0b;
+
+    /* 錯誤 */
+    --danger-color: #ef4444;
+
+    /* 資訊 */
+    --info-color: #3b82f6;
+}
+
+/* 字體粗細 */
+.fw-900 {
+    font-weight: 900;
+}
+
+.fw-800 {
+    font-weight: 800;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fw-400 {
+    font-weight: 400;
+}
+
+.fw-300 {
+    font-weight: 300;
+}
+
+.fw-200 {
+    font-weight: 200;
+}
+
+.fw-100 {
+    font-weight: 100;
+}
+
+/* 字體顏色 */
+.btn-text-primary {
+    color: var(--text-primary);
+}
+
+.btn-text-secondary {
+    color: var(--text-secondary);
+}
+
+/*卷軸特效*/
+.roller {
+    position: relative;
+    overflow: hidden;
+}
+
+.roller img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+
+.roller_box {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(255, 255, 255, .4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: .5s;
+}
+
+/* 下 */
+.slide-bottom {
+    transform: translateY(100%);
+}
+
+.roller:hover .slide-bottom {
+    transform: translateY(0);
+}
+
+/* 上 */
+.slide-top {
+    transform: translateY(-100%);
+}
+
+.roller:hover .slide-top {
+    transform: translateY(0);
+}
+
+/* 左 */
+.slide-left {
+    transform: translateX(-100%);
+}
+
+.roller:hover .slide-left {
+    transform: translateX(0);
+}
+
+/* 右 */
+.slide-right {
+    transform: translateX(100%);
+}
+
+.roller:hover .slide-right {
+    transform: translateX(0);
+}
