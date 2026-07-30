@@ -5,31 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>台南旅遊巡禮｜景點列表</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="css/my.css">
+    <link rel="stylesheet" href="css/navbar.css">
     <style>
-        /* =========================================================
-   台南旅遊巡禮 — 景點列表頁 my.css
-   與 index.html 共用同一套視覺語彙：
-   紙色底、靛藍、硃紅、金線，Noto Serif TC / Noto Sans TC
-   ========================================================= */
-
-        :root {
-            --paper: #F5EFE0;
-            --paper-deep: #ECE3CC;
-            --ink: #2B2620;
-            --indigo: #16324F;
-            --indigo-deep: #0E2338;
-            --vermilion: #B33B2E;
-            --gold: #C89B3C;
-        }
-
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
@@ -40,426 +24,397 @@
             line-height: 1.7;
         }
 
+        h1,
+        h2,
+        h3 {
+            font-family: "Noto Serif TC", serif;
+        }
+
         a {
             text-decoration: none;
             color: inherit;
         }
 
-        /* ---------- 版面容器（沿用 Bootstrap .container，僅收斂寬度） ---------- */
-        .container {
-            max-width: 1160px;
+        img {
+            display: block;
+            max-width: 100%;
         }
 
-        /* ---------- NAVBAR ---------- */
-        .navbar {
-            background: var(--paper);
-            border-bottom: 1px solid rgba(43, 38, 32, .12);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            padding: 0;
-        }
-
-        .navbar .nav-inner {
+        .wrap {
             max-width: 1160px;
             margin: 0 auto;
             padding: 0 24px;
+        }
+
+        /* ---------- PAGE HEADER ---------- */
+        .page-header {
+            background: var(--indigo-deep);
+            padding: 64px 0 52px;
+        }
+
+        .page-header .label {
+            font-size: 13px;
+            letter-spacing: 4px;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(30px, 4vw, 42px);
+            font-weight: 900;
+            color: var(--paper);
+        }
+
+        .page-header p {
+            margin-top: 12px;
+            color: rgba(245, 239, 224, .75);
+            font-size: 14.5px;
+            max-width: 480px;
+        }
+
+        /* ---------- FILTER BAR ---------- */
+        .filter-bar {
+            background: var(--paper-deep);
+            border-bottom: 1px solid rgba(43, 38, 32, .1);
+            padding: 22px 0;
+            position: sticky;
+            top: 72px;
+            z-index: 40;
+        }
+
+        .filter-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            height: 72px;
+            gap: 14px;
+            flex-wrap: wrap;
         }
 
-        .navbar .brand {
-            font-family: "Noto Serif TC", serif;
-            font-weight: 900;
-            font-size: 22px;
-            letter-spacing: 2px;
-            color: var(--indigo-deep);
-        }
-
-        .navbar .brand span {
-            color: var(--vermilion);
-        }
-
-        .navbar .nav-links {
-            display: flex;
-            gap: 36px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar .nav-links a {
-            font-size: 15px;
+        .cat-btn {
+            padding: 9px 20px;
+            font-size: 13.5px;
             font-weight: 500;
             letter-spacing: 1px;
+            border: 1px solid rgba(43, 38, 32, .18);
+            border-radius: 20px;
+            background: transparent;
             color: var(--ink);
-            position: relative;
-            padding-bottom: 4px;
+            cursor: pointer;
+            transition: .2s;
         }
 
-        .navbar .nav-links a.active {
+        .cat-btn:hover {
+            border-color: var(--vermilion);
             color: var(--vermilion);
         }
 
-        .navbar .nav-links a.active::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 2px;
+        .cat-btn.active {
             background: var(--vermilion);
-        }
-
-        @media screen and (max-width: 767px) {
-            .navbar .nav-links {
-                gap: 18px;
-            }
-        }
-
-        /* ---------- HERO / IMGBOX 橫幅 ---------- */
-        .imgbox {
-            height: 320px;
-            background-image: url(../image/car.jpg);
-            background-position: center center;
-            background-size: cover;
-            position: relative;
-            display: flex;
-            align-items: center;
-            border-radius: 0 0 6px 6px;
-            overflow: hidden;
-        }
-
-        .imgbox::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(100deg, rgba(14, 35, 56, .92) 15%, rgba(14, 35, 56, .55) 55%, rgba(14, 35, 56, .15) 90%);
-        }
-
-        .imgbox::after {
-            content: "府城景點總覽";
-            position: relative;
-            z-index: 2;
-            font-family: "Noto Serif TC", serif;
-            font-weight: 900;
-            font-size: clamp(26px, 4vw, 38px);
-            letter-spacing: 4px;
+            border-color: var(--vermilion);
             color: var(--paper);
-            padding: 0 32px;
         }
 
-        /* ---------- 分類按鈕列 ---------- */
-        .a1 {
-            height: 56px;
+        .search-box {
+            margin-left: auto;
+            position: relative;
+            min-width: 240px;
+            flex: 1 1 240px;
+            max-width: 320px;
+        }
+
+        .search-box input {
             width: 100%;
-            margin-top: 24px;
-            margin-bottom: 8px;
-            text-align: center;
-            line-height: 56px;
-            font-weight: 700;
-            font-family: "Noto Serif TC", serif;
-            letter-spacing: 2px;
-            background: var(--paper-deep) !important;
-            color: var(--indigo-deep) !important;
-            border: 1px solid rgba(43, 38, 32, .1) !important;
-            border-radius: 4px;
-            transition: .25s;
+            padding: 10px 16px;
+            font-family: "Noto Sans TC", sans-serif;
+            font-size: 14px;
+            border: 1px solid rgba(43, 38, 32, .18);
+            border-radius: 20px;
+            background: var(--paper);
+            color: var(--ink);
         }
 
-        .a1:hover {
-            background: var(--indigo-deep) !important;
-            color: var(--paper) !important;
-            border-color: var(--indigo-deep) !important;
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--indigo);
         }
 
-        @media screen and (max-width: 767px) {
-            .a1 {
-                height: 46px;
-                line-height: 46px;
-                font-size: 13px;
-                letter-spacing: 1px;
+        .search-box input::placeholder {
+            color: rgba(43, 38, 32, .4);
+        }
+
+        @media (max-width: 640px) {
+            .search-box {
+                max-width: none;
+                flex-basis: 100%;
+                order: 10;
             }
         }
 
-        /* ---------- 搜尋列 ---------- */
-        #searchInput {
-            height: 48px;
-            border-radius: 4px !important;
-            background: #fff;
-            font-size: 15px;
-            border: 1px solid rgba(43, 38, 32, .25) !important;
+        /* ---------- RESULT META ---------- */
+        .result-meta {
+            padding: 26px 0 4px;
+            font-size: 13px;
+            color: rgba(43, 38, 32, .55);
+            letter-spacing: .5px;
         }
 
-        #searchInput:focus {
-            border-color: var(--vermilion) !important;
-            box-shadow: 0 0 0 .15rem rgba(179, 59, 46, .15) !important;
+        .result-meta strong {
+            color: var(--vermilion);
         }
 
-        /* ---------- 景點卡片 ---------- */
-        .shadow-box {
+        /* ---------- CARD GRID ---------- */
+        .list-section {
+            padding: 20px 0 90px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .place-card {
             background: #fff;
-            box-shadow: 0 10px 24px rgba(43, 38, 32, .08);
             border-radius: 6px;
             overflow: hidden;
-            margin-top: 24px;
+            box-shadow: 0 10px 24px rgba(43, 38, 32, .08);
             transition: .3s;
         }
 
-        .shadow-box:hover {
+        .place-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 18px 32px rgba(43, 38, 32, .14);
         }
 
-        .contentbox {
-            padding: 18px;
-            background-color: #fff;
-            min-height: 420px;
-            display: flex;
-            flex-direction: column;
+        .place-card .thumb {
+            height: 200px;
+            overflow: hidden;
         }
 
-        .contentbox img {
+        .place-card .thumb img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 4px;
             transition: .4s;
         }
 
-        .shadow-box:hover .contentbox img {
+        .place-card:hover .thumb img {
             transform: scale(1.06);
         }
 
-        .contentbox .h2 {
-            font-family: "Noto Serif TC", serif;
+        .place-card .body {
+            padding: 22px 22px 26px;
+        }
+
+        .place-tag {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--vermilion);
+            border: 1px solid var(--vermilion);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .place-card h3 {
             font-size: 20px;
             font-weight: 700;
             color: var(--indigo-deep);
-            margin-top: 16px;
-            margin-bottom: 4px;
-            text-align: left !important;
-        }
-
-        .contentbox h6 {
-            font-size: 12.5px;
-            letter-spacing: 1px;
-            color: rgba(43, 38, 32, .45);
             margin-bottom: 8px;
         }
 
-        .contentbox p {
-            color: rgba(43, 38, 32, .62);
-            line-height: 1.8;
+        .place-card p {
             font-size: 13.5px;
-            display: block;
-            height: 72px;
-            overflow: hidden;
-            position: relative;
-            flex: 1;
-        }
-
-        .contentbox p::after {
-            content: "...";
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            background: #fff;
-            padding-left: 5px;
             color: rgba(43, 38, 32, .62);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .roller_box {
-            text-align: right;
-            margin-top: 15px;
-        }
-
-        .contentbox .btn-primary {
-            background: var(--vermilion) !important;
-            border-color: var(--vermilion) !important;
-            border-radius: 20px;
-            padding: 8px 25px;
-            font-weight: 700;
+        .place-district {
+            display: block;
+            margin-top: 12px;
+            font-size: 12.5px;
+            color: rgba(43, 38, 32, .45);
             letter-spacing: 1px;
-            transition: .25s;
         }
 
-        .contentbox .btn-primary:hover {
-            background: #96301F !important;
-            border-color: #96301F !important;
+        .view-link {
+            display: inline-block;
+            margin-top: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--indigo-deep);
+            border-bottom: 1px solid var(--indigo-deep);
+            padding-bottom: 2px;
         }
 
-        @media screen and (max-width: 767px) {
-            .contentbox {
-                min-height: auto;
-                padding: 15px;
-            }
+        .empty-state {
+            text-align: center;
+            padding: 80px 0;
+            color: rgba(43, 38, 32, .45);
+            font-size: 14.5px;
+            grid-column: 1 / -1;
+        }
 
-            .contentbox img {
-                height: 170px;
-            }
-
-            .contentbox .h2 {
-                font-size: 18px;
+        @media (max-width: 991px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        @media screen and (min-width: 768px) {
-            .contentbox {
-                height: 430px;
+        @media (max-width: 640px) {
+            .card-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         /* ---------- FOOTER ---------- */
-        footer.site-footer {
+        footer {
             background: var(--indigo-deep);
             color: rgba(245, 239, 224, .7);
             padding: 48px 0 28px;
-            margin-top: 56px;
         }
 
-        footer.site-footer .footer-inner {
-            max-width: 1160px;
-            margin: 0 auto;
-            padding: 0 24px 24px;
+        footer .wrap {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 20px;
+            padding-bottom: 24px;
             border-bottom: 1px solid rgba(245, 239, 224, .12);
         }
 
-        footer.site-footer .brand {
-            font-family: "Noto Serif TC", serif;
-            font-weight: 900;
-            letter-spacing: 2px;
+        footer .brand {
             color: var(--paper);
         }
 
-        footer.site-footer nav {
+        footer nav {
             display: flex;
             gap: 26px;
             font-size: 14px;
         }
 
-        footer.site-footer .footer-bottom {
+        .footer-bottom {
             text-align: center;
             font-size: 12.5px;
             margin-top: 22px;
             color: rgba(245, 239, 224, .4);
             letter-spacing: 1px;
         }
+
+        /* ---------- MOBILE NAV (同 navbar.css 邏輯，保留備援) ---------- */
+        @media (max-width: 767px) {
+            .nav-links {
+                position: fixed;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: var(--paper);
+                flex-direction: column;
+                gap: 0;
+                border-bottom: 1px solid rgba(43, 38, 32, .12);
+                display: none;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 16px 24px;
+                width: 100%;
+                border-top: 1px solid rgba(43, 38, 32, .08);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar">
-        <div class="nav-inner">
+        <div class="wrap">
             <a href="index.html" class="brand">府城<span>巡</span>禮</a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">首頁</a></li>
-                <li><a href="attractions.html" class="active">景點列表</a></li>
+                <li><a href="attractions1.html" class="active">景點列表</a></li>
                 <li><a href="admin.html">管理頁面</a></li>
             </ul>
+            <button class="nav-toggle" id="navToggle">☰</button>
         </div>
     </nav>
 
-    <div class="imgbox"></div>
+    <section class="page-header">
+        <div class="wrap">
+            <div class="label">ATTRACTIONS</div>
+            <h1>把台南攤開來看</h1>
+            <p>古蹟、美食、熱門景點、自然景觀，挑一個分類，或直接打字找你想去的地方。</p>
+        </div>
+    </section>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-6 col-md-3 col-lg-2">
-                <a class="btn btn-info a1 category-btn" data-category="古蹟">古蹟</a>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2">
-                <a class="btn btn-info a1 category-btn" data-category="美食">美食</a>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2">
-                <a class="btn btn-info a1 category-btn" data-category="熱門景點">熱門景點</a>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2">
-                <a class="btn btn-info a1 category-btn" data-category="自然景觀">自然景觀</a>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2">
-                <a class="btn btn-info a1 category-btn" data-category="全部">回到全部</a>
+    <section class="filter-bar">
+        <div class="wrap filter-row">
+            <button class="cat-btn active" data-category="全部">全部</button>
+            <button class="cat-btn" data-category="古蹟">古蹟</button>
+            <button class="cat-btn" data-category="美食">美食</button>
+            <button class="cat-btn" data-category="熱門景點">熱門景點</button>
+            <button class="cat-btn" data-category="自然景觀">自然景觀</button>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="輸入想去的景點名稱">
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 col-md-8">
-                <input type="text" name="" id="searchInput" class="form-control border border-dark"
-                    placeholder="輸入想去的景點名稱">
-            </div>
-        </div>
-        <div class="row" id="bd">
-            <div class="col-md-6 col-lg-4">
-                <div class="roller shadow-box">
-                    <div class="contentbox">
-                        <img src="image/shanghai.jpg" alt="" class="img-fluid">
-                        <div class="h2 text-center">標題</div>
-                        <p>
-                            軟體點點陽光看了在於，體育可惜女朋友實業查詢門派上漲，
-                            後來長度應該也就排行榜排行榜部落格。
-                        </p>
-                        <div class="roller_box slide-right">
-                            <button class="btn btn-primary">查看</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </section>
 
-    <footer class="site-footer">
-        <div class="footer-inner">
+    <section class="list-section">
+        <div class="wrap">
+            <div class="result-meta" id="resultMeta"></div>
+            <div class="card-grid" id="bd"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap">
             <div class="brand">府城<span style="color:#B33B2E">巡</span>禮</div>
             <nav>
                 <a href="index.html">首頁</a>
-                <a href="attractions.html">景點列表</a>
+                <a href="attractions1.html">景點列表</a>
                 <a href="admin.html">管理頁面</a>
             </nav>
         </div>
         <div class="footer-bottom">台南旅遊巡禮｜職訓結業專題</div>
     </footer>
 
-    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/jquery-4.0.0.js"></script>
     <script>
-        const API_BASE = "http://172.20.10.4:5000/attractions"
+        const API_BASE = "http://192.168.60.11:5000/attractions";
+        let cleandata = [];
+        let currentCategory = "全部";
+        let currentKeyword = "";
+
         $(function () {
             $.ajax({
                 type: "Get",
                 dataType: "json",
                 url: API_BASE,
                 success: function (data) {
-                    console.log(data)
-                    const cleandata = data.attractions.map(function (item) {
+                    cleandata = data.attractions.map(function (item) {
                         let name = (item.name ?? "").trim();
-                        if (name == "") {
-                            name = "未提供名稱";
-                        }
+                        if (name == "") name = "未提供名稱";
                         let district = (item.district ?? "").trim();
-                        if (district == "") {
-                            district = "未提供地址";
-                        }
+                        if (district == "") district = "未提供地址";
                         let image_url = (item.image_url ?? "").trim();
-                        if (image_url == "") {
-                            image_url = "未提供圖片";
-                        }
-
+                        if (image_url == "") image_url = "未提供圖片";
                         let category = (item.category ?? "").trim();
-                        if (category == "") {
-                            category = "未提供類型";
-                        }
+                        if (category == "") category = "未提供類型";
                         let description = (item.description ?? "").trim();
-                        if (description == "") {
-                            description = "未提供說明";
-                        }
+                        if (description == "") description = "未提供說明";
                         let created_at = (item.created_at ?? "").trim();
-                        if (created_at == "") {
-                            created_at = "未提供建立時間";
-                        }
+                        if (created_at == "") created_at = "未提供建立時間";
 
                         return {
                             id: item.id,
@@ -469,57 +424,84 @@
                             image_url: image_url,
                             category: category,
                             created_at: created_at,
-                        }
+                        };
                     });
-                    console.log("清洗後的資料", cleandata);
 
-                    renderCards(cleandata);
+                    // 支援從首頁分類卡片帶 ?category=xxx 過來，一進頁就套用篩選
+                    const params = new URLSearchParams(window.location.search);
+                    const fromUrl = params.get("category");
+                    if (fromUrl) {
+                        currentCategory = fromUrl;
+                        $(".cat-btn").removeClass("active");
+                        $(`.cat-btn[data-category="${fromUrl}"]`).addClass("active");
+                    }
 
-                    // 監聽四個分類按鈕的點擊事件
-                    $(".category-btn").on("click", function (e) {
-                        e.preventDefault(); // 防止 <a href=""> 觸發跳轉/重新整理，這是你現在按鈕會重整頁面的原因
-                        const selectedCategory = $(this).data("category"); // 從 data-category 屬性拿到分類名稱
-                        const filtered = selectedCategory === "全部" ? cleandata : cleandata.filter(item => item.category === selectedCategory);
-                        renderCards(filtered); // 把原本 forEach 渲染的邏輯抽成一個函式，重複使用
-                    })
-
-                    //監聽搜尋關鍵字
-                    $("#searchInput").on("input", function () {
-                        const keyword = $(this).val().trim();
-                        const filtered = keyword === "" ? cleandata : cleandata.filter(item => item.name.includes(keyword));
-                        renderCards(filtered);
-                    });
+                    applyFilters();
                 },
                 error: function (err) {
                     console.log(err);
-                },
+                    $("#bd").html('<div class="empty-state">資料讀取失敗，請確認後端伺服器是否啟動</div>');
+                }
+            });
 
+            // 監聽分類按鈕
+            $(".cat-btn").on("click", function () {
+                $(".cat-btn").removeClass("active");
+                $(this).addClass("active");
+                currentCategory = $(this).data("category");
+                applyFilters();
+            });
 
+            // 監聽搜尋關鍵字
+            $("#searchInput").on("input", function () {
+                currentKeyword = $(this).val().trim();
+                applyFilters();
             });
         });
 
+        function applyFilters() {
+            let filtered = cleandata;
+
+            if (currentCategory !== "全部") {
+                filtered = filtered.filter(item => item.category === currentCategory);
+            }
+            if (currentKeyword !== "") {
+                filtered = filtered.filter(item => item.name.includes(currentKeyword));
+            }
+
+            renderCards(filtered);
+        }
+
         function renderCards(data) {
+            $("#resultMeta").html(`共 <strong>${data.length}</strong> 個景點`);
             $("#bd").empty();
+
+            if (data.length === 0) {
+                $("#bd").html('<div class="empty-state">找不到符合條件的景點，換個關鍵字或分類試試</div>');
+                return;
+            }
+
             data.forEach(function (item) {
-                let strHTML = `<div class="col-md-6 col-lg-4">
-                            <div class="roller shadow-box">
-                                <div class="contentbox">
-                                    <img src="${item.image_url}" alt="" class="img-fluid">
-                                    <div class="h2 text-center">${item.name}</div>
-                                    <h6>${item.district}</h6>
-                                    <p>${item.description}</p>
-                                    <div class="roller_box slide-right">
-                                        <a href="detail.html?id=${item.id}" class="btn btn-primary">查看</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
+                let strHTML = `<div class="place-card">
+                    <div class="thumb"><img src="${item.image_url}" alt="${item.name}"></div>
+                    <div class="body">
+                        <span class="place-tag">${item.category}</span>
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <span class="place-district">${item.district}</span>
+                        <a href="detail.html?id=${item.id}" class="view-link">查看詳細 →</a>
+                    </div>
+                </div>`;
                 $("#bd").append(strHTML);
             });
         }
-
     </script>
 
+    <script>
+        document.getElementById("navToggle").addEventListener("click", function () {
+            document.getElementById("navLinks").classList.toggle("open");
+        });
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,75 @@
+ :root {
+     --paper: #F5EFE0;
+     --paper-deep: #ECE3CC;
+     --ink: #2B2620;
+     --indigo: #16324F;
+     --indigo-deep: #0E2338;
+     --vermilion: #B33B2E;
+     --gold: #C89B3C;
+ }
+
+ /* ---------- NAVBAR ---------- */
+ .navbar {
+     background: var(--paper);
+     border-bottom: 1px solid rgba(43, 38, 32, .12);
+     position: sticky;
+     top: 0;
+     z-index: 50;
+ }
+
+ .navbar .wrap {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     height: 72px;
+ }
+
+ .brand {
+     font-family: "Noto Serif TC", serif;
+     font-weight: 900;
+     font-size: 22px;
+     letter-spacing: 2px;
+     color: var(--indigo-deep);
+ }
+
+ .brand span {
+     color: var(--vermilion);
+ }
+
+ .nav-links {
+     display: flex;
+     gap: 36px;
+     list-style: none;
+ }
+
+ .nav-links a {
+     font-size: 15px;
+     font-weight: 500;
+     letter-spacing: 1px;
+     color: var(--ink);
+     position: relative;
+     padding-bottom: 4px;
+ }
+
+ .nav-links a.active {
+     color: var(--vermilion);
+ }
+
+ .nav-links a.active::after {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -2px;
+     width: 100%;
+     height: 2px;
+     background: var(--vermilion);
+ }
+
+ .nav-toggle {
+     display: none;
+     font-size: 22px;
+     background: none;
+     border: none;
+     cursor: pointer;
+     color: var(--indigo-deep);
+ }

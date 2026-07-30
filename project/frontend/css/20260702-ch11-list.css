@@ -1,0 +1,278 @@
+:root {
+
+    /* 八曜和茶風格 */
+    --primary-color: #244034;
+    /* 深茶綠 */
+    --secondary-color: #8A6A45;
+    /* 茶棕 */
+
+    --bg-main: #F7F3EA;
+    /* 米白 */
+    --bg-sub: #EDE3D3;
+    /* 淺茶色 */
+
+    --text-main: #2B2B2B;
+    --text-sub: #7A756D;
+
+    --border-active: #D5C4AA;
+
+    --shadow-main: rgba(80, 60, 30, .15);
+
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+}
+
+
+/* 主容器 */
+.container {
+    margin-top: 50px;
+}
+
+
+/* 標題 */
+.display-3 {
+
+    color: var(--primary-color);
+    font-weight: 900;
+    letter-spacing: 5px;
+    margin-bottom: 30px;
+
+}
+
+
+/* 導覽列 */
+
+.navbar {
+
+    background-color: #244034 !important;
+}
+
+
+.navbar-brand,
+.nav-link {
+
+    color: #F7F3EA !important;
+
+}
+
+
+.nav-link:hover {
+
+    color: #D5C4AA !important;
+
+}
+
+
+/* 表格 */
+
+table {
+
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 20px var(--shadow-main);
+
+}
+
+
+/* 表格標題 */
+
+caption {
+
+    font-size: 20px;
+    font-weight: bold;
+
+    color: var(--secondary-color);
+
+}
+
+
+/* 表頭 */
+
+thead {
+
+    font-size: 18px;
+
+}
+
+
+.table-dark {
+
+    --bs-table-bg: #244034;
+
+    --bs-table-color: #F7F3EA;
+
+}
+
+
+/* 表格內容 */
+
+tbody tr {
+
+    transition: .25s;
+
+}
+
+
+tbody tr:hover {
+
+    background-color: #F5EDDF;
+
+    transform: scale(1.01);
+
+}
+
+
+/* td置中 */
+
+td {
+
+    vertical-align: middle;
+
+}
+
+
+/* 按鈕 */
+
+.btn-info {
+
+
+    background-color: #8A6A45;
+
+    border-color: #8A6A45;
+
+    color: white;
+
+}
+
+
+.btn-info:hover {
+
+
+    background-color: #6E5236;
+
+    border-color: #6E5236;
+
+}
+
+
+
+.btn-secondary {
+
+
+    background-color: #707070;
+
+    border: none;
+
+}
+
+
+
+/* Modal */
+
+.modal-content {
+
+    border-radius: 20px;
+
+    border: none;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .2);
+
+}
+
+
+.modal-header {
+
+
+    background-color: #244034;
+
+    color: white;
+
+    border-radius:
+        20px 20px 0 0;
+
+}
+
+
+.modal-footer {
+
+
+    background-color: #F7F3EA;
+
+}
+
+/* input */
+
+.form-control {
+
+
+    border-radius: 12px;
+
+    border: 1px solid #D5C4AA;
+
+}
+
+
+
+.form-control:focus {
+
+
+    border-color: #8A6A45;
+
+    box-shadow:
+        0 0 0 .25rem rgba(138, 106, 69, .25);
+
+}
+
+
+
+/* 分頁 */
+
+.pagination .page-link {
+
+
+    color: #244034;
+
+}
+
+
+
+.pagination .active .page-link {
+
+
+    background-color: #244034;
+
+    border-color: #244034;
+
+}
+
+
+/* RWD手機卡片 */
+
+@media screen and (max-width:768px) {
+
+
+    .table-rwd tbody tr {
+
+
+        border:
+            2px solid #D5C4AA;
+
+    }
+
+
+    .table-rwd tbody tr td::before {
+
+
+        color: #244034;
+
+    }
+
+
+}

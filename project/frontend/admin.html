@@ -1,25 +1,704 @@
 <!DOCTYPE html>
-<html lang="zh_TW">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/my.css">
+    <title>台南旅遊巡禮｜管理頁面</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/navbar.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Noto Sans TC", sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Noto Serif TC", serif;
+        }
+
+        a,
+        button {
+            text-decoration: none;
+            color: inherit;
+            font-family: inherit;
+        }
+
+        .wrap {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ---------- PAGE HEADER ---------- */
+        .page-header {
+            background: var(--indigo-deep);
+            padding: 56px 0 44px;
+        }
+
+        .page-header .label {
+            font-size: 13px;
+            letter-spacing: 4px;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(28px, 4vw, 38px);
+            font-weight: 900;
+            color: var(--paper);
+        }
+
+        .page-header p {
+            margin-top: 10px;
+            color: rgba(245, 239, 224, .75);
+            font-size: 14px;
+        }
+
+        /* ---------- TOOLBAR ---------- */
+        .toolbar {
+            padding: 30px 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .toolbar .count {
+            font-size: 13.5px;
+            color: rgba(43, 38, 32, .55);
+        }
+
+        .toolbar .count strong {
+            color: var(--vermilion);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: .2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--vermilion);
+            color: var(--paper);
+        }
+
+        .btn-primary:hover {
+            background: #96301F;
+        }
+
+        .btn-outline {
+            border-color: rgba(43, 38, 32, .25);
+            background: transparent;
+            color: var(--ink);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--indigo-deep);
+            color: var(--indigo-deep);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12.5px;
+        }
+
+        .btn-danger {
+            background: transparent;
+            border-color: rgba(179, 59, 46, .4);
+            color: var(--vermilion);
+        }
+
+        .btn-danger:hover {
+            background: var(--vermilion);
+            color: var(--paper);
+        }
+
+        /* ---------- FORM PANEL ---------- */
+        .form-panel {
+            background: var(--paper-deep);
+            border: 1px solid rgba(43, 38, 32, .12);
+            border-radius: 6px;
+            padding: 28px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-panel.open {
+            display: block;
+        }
+
+        .form-panel h2 {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--indigo-deep);
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-grid .full {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(43, 38, 32, .7);
+            margin-bottom: 6px;
+            letter-spacing: .5px;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 10px 14px;
+            font-family: "Noto Sans TC", sans-serif;
+            font-size: 14px;
+            border: 1px solid rgba(43, 38, 32, .2);
+            border-radius: 3px;
+            background: #fff;
+            color: var(--ink);
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: var(--indigo);
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .field-error {
+            font-size: 12px;
+            color: var(--vermilion);
+            margin-top: 5px;
+            min-height: 16px;
+        }
+
+        .form-actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-msg {
+            margin-top: 14px;
+            font-size: 13.5px;
+            padding: 10px 14px;
+            border-radius: 3px;
+            display: none;
+        }
+
+        .form-msg.show {
+            display: block;
+        }
+
+        .form-msg.success {
+            background: rgba(22, 50, 79, .08);
+            color: var(--indigo-deep);
+        }
+
+        .form-msg.error {
+            background: rgba(179, 59, 46, .08);
+            color: var(--vermilion);
+        }
+
+        /* ---------- TABLE ---------- */
+        .table-wrap {
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 24px rgba(43, 38, 32, .06);
+            margin-bottom: 80px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--indigo-deep);
+        }
+
+        th {
+            text-align: left;
+            font-size: 12.5px;
+            letter-spacing: 1.5px;
+            color: rgba(245, 239, 224, .8);
+            font-weight: 600;
+            padding: 14px 18px;
+        }
+
+        td {
+            padding: 14px 18px;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(43, 38, 32, .08);
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: rgba(43, 38, 32, .02);
+        }
+
+        .thumb-cell img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .name-cell {
+            font-weight: 700;
+            color: var(--indigo-deep);
+        }
+
+        .cat-pill {
+            display: inline-block;
+            font-size: 11.5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--vermilion);
+            color: var(--vermilion);
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .empty-row td {
+            text-align: center;
+            padding: 60px 0;
+            color: rgba(43, 38, 32, .45);
+        }
+
+        @media (max-width: 860px) {
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 760px;
+            }
+        }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            background: var(--indigo-deep);
+            color: rgba(245, 239, 224, .7);
+            padding: 48px 0 28px;
+        }
+
+        footer .wrap {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(245, 239, 224, .12);
+        }
+
+        footer .brand {
+            color: var(--paper);
+        }
+
+        footer nav {
+            display: flex;
+            gap: 26px;
+            font-size: 14px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 12.5px;
+            margin-top: 22px;
+            color: rgba(245, 239, 224, .4);
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 767px) {
+            .nav-links {
+                position: fixed;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: var(--paper);
+                flex-direction: column;
+                gap: 0;
+                border-bottom: 1px solid rgba(43, 38, 32, .12);
+                display: none;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 16px 24px;
+                width: 100%;
+                border-top: 1px solid rgba(43, 38, 32, .08);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div id="navbar-placeholder"></div>
-        <div class="display-2 text-content-center">網頁施工中 待ってね！！</div>
+    <nav class="navbar">
+        <div class="wrap">
+            <a href="index.html" class="brand">府城<span>巡</span>禮</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="attractions1.html">景點列表</a></li>
+                <li><a href="admin.html" class="active">管理頁面</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle">☰</button>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="wrap">
+            <div class="label">ADMIN</div>
+            <h1>景點資料管理</h1>
+            <p>新增、修改或刪除景點資料，異動會直接寫入資料庫。</p>
+        </div>
+    </section>
+
+    <div class="wrap">
+        <div class="toolbar">
+            <div class="count" id="countText">共 0 筆景點</div>
+            <button class="btn btn-primary" id="addBtn">＋ 新增景點</button>
+        </div>
+
+        <div class="form-panel" id="formPanel">
+            <h2 id="formTitle">新增景點</h2>
+            <form id="attractionForm">
+                <input type="hidden" id="editId" value="">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="fName">景點名稱</label>
+                        <input type="text" id="fName" placeholder="例如：赤崁樓">
+                        <div class="field-error" id="errName"></div>
+                    </div>
+                    <div class="field">
+                        <label for="fDistrict">城市/地區</label>
+                        <input type="text" id="fDistrict" placeholder="例如：中西區">
+                        <div class="field-error" id="errDistrict"></div>
+                    </div>
+                    <div class="field">
+                        <label for="fCategory">分類</label>
+                        <select id="fCategory">
+                            <option value="">請選擇分類</option>
+                            <option value="古蹟">古蹟</option>
+                            <option value="美食">美食</option>
+                            <option value="熱門景點">熱門景點</option>
+                            <option value="自然景觀">自然景觀</option>
+                        </select>
+                        <div class="field-error" id="errCategory"></div>
+                    </div>
+                    <div class="field">
+                        <label for="fImage">圖片網址</label>
+                        <input type="text" id="fImage" placeholder="https://...">
+                        <div class="field-error" id="errImage"></div>
+                    </div>
+                    <div class="field full">
+                        <label for="fDesc">介紹文字</label>
+                        <textarea id="fDesc" placeholder="簡短介紹這個景點"></textarea>
+                        <div class="field-error" id="errDesc"></div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">儲存</button>
+                    <button type="button" class="btn btn-outline" id="cancelBtn">取消</button>
+                </div>
+                <div class="form-msg" id="formMsg"></div>
+            </form>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>圖片</th>
+                        <th>景點名稱</th>
+                        <th>地區</th>
+                        <th>分類</th>
+                        <th>簡介</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr class="empty-row">
+                        <td colspan="6">資料讀取中...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <footer>
+        <div class="wrap">
+            <div class="brand">府城<span style="color:#B33B2E">巡</span>禮</div>
+            <nav>
+                <a href="index.html">首頁</a>
+                <a href="attractions1.html">景點列表</a>
+                <a href="admin.html">管理頁面</a>
+            </nav>
+        </div>
+        <div class="footer-bottom">台南旅遊巡禮｜職訓結業專題</div>
+    </footer>
+
     <script src="js/jquery-4.0.0.js"></script>
     <script>
+        const API_BASE = "http://192.168.60.11:5000/attractions";
+        let allData = [];
+        let isEditMode = false;
+
         $(function () {
-            $("#navbar-placeholder").load("navbar.html");
+            loadData();
+
+            $("#addBtn").on("click", function () {
+                openForm("add");
+            });
+
+            $("#cancelBtn").on("click", function () {
+                closeForm();
+            });
+
+            $("#attractionForm").on("submit", function (e) {
+                e.preventDefault();
+                submitForm();
+            });
+
+            $("#tableBody").on("click", ".edit-btn", function () {
+                const id = $(this).data("id");
+                const item = allData.find(a => a.id === id);
+                if (item) openForm("edit", item);
+            });
+
+            $("#tableBody").on("click", ".delete-btn", function () {
+                const id = $(this).data("id");
+                const item = allData.find(a => a.id === id);
+                const name = item ? item.name : "此景點";
+                if (confirm(`確定要刪除「${name}」嗎？此動作無法復原。`)) {
+                    deleteItem(id);
+                }
+            });
+
+            document.getElementById("navToggle").addEventListener("click", function () {
+                document.getElementById("navLinks").classList.toggle("open");
+            });
         });
+
+        function loadData() {
+            $.ajax({
+                type: "Get",
+                dataType: "json",
+                url: API_BASE,
+                success: function (data) {
+                    allData = data.attractions || [];
+                    renderTable();
+                },
+                error: function () {
+                    $("#tableBody").html('<tr class="empty-row"><td colspan="6">資料讀取失敗，請確認後端伺服器是否啟動</td></tr>');
+                }
+            });
+        }
+
+        function renderTable() {
+            $("#countText").html(`共 <strong>${allData.length}</strong> 筆景點`);
+
+            if (allData.length === 0) {
+                $("#tableBody").html('<tr class="empty-row"><td colspan="6">目前沒有景點資料，點右上角「新增景點」開始建立</td></tr>');
+                return;
+            }
+
+            $("#tableBody").empty();
+            allData.forEach(function (item) {
+                let row = `<tr>
+                    <td class="thumb-cell"><img src="${item.image_url || ''}" alt="${item.name || ''}"></td>
+                    <td class="name-cell">${item.name || '未提供名稱'}</td>
+                    <td>${item.district || '未提供地址'}</td>
+                    <td><span class="cat-pill">${item.category || '未分類'}</span></td>
+                    <td>${(item.description || '').slice(0, 24)}${(item.description || '').length > 24 ? '…' : ''}</td>
+                    <td class="action-cell">
+                        <button class="btn btn-outline btn-sm edit-btn" data-id="${item.id}">編輯</button>
+                        <button class="btn btn-danger btn-sm delete-btn" data-id="${item.id}">刪除</button>
+                    </td>
+                </tr>`;
+                $("#tableBody").append(row);
+            });
+        }
+
+        function openForm(mode, item) {
+            isEditMode = mode === "edit";
+            $("#formTitle").text(isEditMode ? "編輯景點" : "新增景點");
+            clearErrors();
+            hideMsg();
+
+            if (isEditMode && item) {
+                $("#editId").val(item.id);
+                $("#fName").val(item.name || "");
+                $("#fDistrict").val(item.district || "");
+                $("#fCategory").val(item.category || "");
+                $("#fImage").val(item.image_url || "");
+                $("#fDesc").val(item.description || "");
+            } else {
+                $("#editId").val("");
+                $("#attractionForm")[0].reset();
+            }
+
+            $("#formPanel").addClass("open");
+            $("html, body").animate({ scrollTop: $("#formPanel").offset().top - 90 }, 300);
+        }
+
+        function closeForm() {
+            $("#formPanel").removeClass("open");
+            $("#attractionForm")[0].reset();
+            clearErrors();
+            hideMsg();
+        }
+
+        function clearErrors() {
+            $(".field-error").text("");
+        }
+
+        function showMsg(text, type) {
+            $("#formMsg").text(text).removeClass("success error").addClass("show " + type);
+        }
+
+        function hideMsg() {
+            $("#formMsg").removeClass("show success error").text("");
+        }
+
+        function validateForm(payload) {
+            clearErrors();
+            let valid = true;
+
+            if (!payload.name) {
+                $("#errName").text("請填寫景點名稱");
+                valid = false;
+            }
+            if (!payload.district) {
+                $("#errDistrict").text("請填寫城市或地區");
+                valid = false;
+            }
+            if (!payload.category) {
+                $("#errCategory").text("請選擇分類");
+                valid = false;
+            }
+            if (!payload.image_url) {
+                $("#errImage").text("請填寫圖片網址");
+                valid = false;
+            }
+            if (!payload.description) {
+                $("#errDesc").text("請填寫介紹文字");
+                valid = false;
+            }
+            return valid;
+        }
+
+        function nowString() {
+            const d = new Date();
+            const pad = n => String(n).padStart(2, "0");
+            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        }
+
+        function submitForm() {
+            const payload = {
+                name: $("#fName").val().trim(),
+                district: $("#fDistrict").val().trim(),
+                category: $("#fCategory").val(),
+                image_url: $("#fImage").val().trim(),
+                description: $("#fDesc").val().trim(),
+                created_at: nowString(),
+            };
+
+            if (!validateForm(payload)) {
+                return;
+            }
+
+            const id = $("#editId").val();
+            const isUpdate = isEditMode && id;
+
+            $.ajax({
+                type: isUpdate ? "PATCH" : "POST",
+                url: isUpdate ? `${API_BASE}/${id}` : API_BASE,
+                contentType: "application/json",
+                data: JSON.stringify(payload),
+                dataType: "json",
+                success: function () {
+                    showMsg(isUpdate ? "更新成功" : "新增成功", "success");
+                    loadData();
+                    setTimeout(closeForm, 700);
+                },
+                error: function (xhr) {
+                    const msg = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : "操作失敗，請稍後再試";
+                    showMsg(msg, "error");
+                }
+            });
+        }
+
+        function deleteItem(id) {
+            $.ajax({
+                type: "DELETE",
+                url: `${API_BASE}/${id}`,
+                dataType: "json",
+                success: function () {
+                    loadData();
+                },
+                error: function (xhr) {
+                    const msg = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : "刪除失敗，請稍後再試";
+                    alert(msg);
+                }
+            });
+        }
     </script>
 </body>
 

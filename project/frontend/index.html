@@ -9,17 +9,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="css/navbar.css">
     <style>
-        :root {
-            --paper: #F5EFE0;
-            --paper-deep: #ECE3CC;
-            --ink: #2B2620;
-            --indigo: #16324F;
-            --indigo-deep: #0E2338;
-            --vermilion: #B33B2E;
-            --gold: #C89B3C;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -55,71 +46,6 @@
             padding: 0 24px;
         }
 
-        /* ---------- NAVBAR ---------- */
-        .navbar {
-            background: var(--paper);
-            border-bottom: 1px solid rgba(43, 38, 32, .12);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .navbar .wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 72px;
-        }
-
-        .brand {
-            font-family: "Noto Serif TC", serif;
-            font-weight: 900;
-            font-size: 22px;
-            letter-spacing: 2px;
-            color: var(--indigo-deep);
-        }
-
-        .brand span {
-            color: var(--vermilion);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 36px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-size: 15px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            color: var(--ink);
-            position: relative;
-            padding-bottom: 4px;
-        }
-
-        .nav-links a.active {
-            color: var(--vermilion);
-        }
-
-        .nav-links a.active::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 2px;
-            background: var(--vermilion);
-        }
-
-        .nav-toggle {
-            display: none;
-            font-size: 22px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--indigo-deep);
-        }
 
         /* ---------- HERO ---------- */
         .hero {
@@ -608,7 +534,7 @@
                 </div>
                 <p>資料之後會直接接 API 動態帶入，這裡先放示意版面。</p>
             </div>
-            <div class="card-grid">
+            <div class="card-grid" id="card">
                 <div class="place-card">
                     <div class="thumb"><img src="https://picsum.photos/600/400?random=1" alt="赤崁樓"></div>
                     <div class="body">
@@ -616,24 +542,6 @@
                         <h3>赤崁樓</h3>
                         <p>台南最具代表性的歷史古蹟之一，建於荷蘭統治時期。</p>
                         <span class="place-district">中西區</span>
-                    </div>
-                </div>
-                <div class="place-card">
-                    <div class="thumb"><img src="https://picsum.photos/600/400?random=5" alt="國華街"></div>
-                    <div class="body">
-                        <span class="place-tag">美食</span>
-                        <h3>國華街</h3>
-                        <p>聚集台南經典小吃，是遊客必訪的美食街。</p>
-                        <span class="place-district">中西區</span>
-                    </div>
-                </div>
-                <div class="place-card">
-                    <div class="thumb"><img src="https://picsum.photos/600/400?random=8" alt="漁光島"></div>
-                    <div class="body">
-                        <span class="place-tag">自然景觀</span>
-                        <h3>漁光島</h3>
-                        <p>擁有沙灘與夕陽景色，是近年熱門拍照景點。</p>
-                        <span class="place-district">安平區</span>
                     </div>
                 </div>
             </div>
@@ -654,6 +562,76 @@
         </div>
         <div class="footer-bottom">台南旅遊巡禮｜職訓結業專題</div>
     </footer>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-4.0.0.js"></script>
+    <script>
+        const API_BASE = "http://192.168.60.11:5000/attractions"
+        $(function () {
+            $.ajax({
+                type: "Get",
+                dataType: "json",
+                url: API_BASE,
+                success: function (data) {
+                    console.log(data)
+                    const cleandata = data.attractions.map(function (item) {
+                        let name = (item.name ?? "").trim();
+                        if (name == "") {
+                            name = "未提供名稱";
+                        }
+                        let district = (item.district ?? "").trim();
+                        if (district == "") {
+                            district = "未提供地址";
+                        }
+                        let image_url = (item.image_url ?? "").trim();
+                        if (image_url == "") {
+                            image_url = "未提供圖片";
+                        }
+
+                        let category = (item.category ?? "").trim();
+                        if (category == "") {
+                            category = "未提供類型";
+                        }
+                        let description = (item.description ?? "").trim();
+                        if (description == "") {
+                            description = "未提供說明";
+                        }
+                        let created_at = (item.created_at ?? "").trim();
+                        if (created_at == "") {
+                            created_at = "未提供建立時間";
+                        }
+
+                        return {
+                            id: item.id,
+                            name: name,
+                            district: district,
+                            description: description,
+                            image_url: image_url,
+                            category: category,
+                            created_at: created_at,
+                        }
+                    });
+                    console.log("清洗後的資料", cleandata);
+
+                    renderCards(cleandata.slice(0, 3));
+                }
+            })
+            function renderCards(data) {
+                $("#card").empty();
+                data.forEach(function (item) {
+                    let strHTML = `<div class="place-card">
+                    <div class="thumb"><img src="${item.image_url}" alt=""></div>
+                    <div class="body">
+                        <span class="place-tag">"${item.category}"</span>
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <span class="place-district">${item.district}</span>
+                    </div>
+                </div>`;
+                    $("#card").append(strHTML);
+                });
+            }
+        });
+    </script>
 
     <script>
         document.getElementById("navToggle").addEventListener("click", function () {
