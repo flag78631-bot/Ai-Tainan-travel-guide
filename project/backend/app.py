@@ -1,4 +1,6 @@
 import sqlite3
+import random
+from datetime import date
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -19,6 +21,30 @@ def init_db():
             image_url TEXT NOT NULL,
             description TEXT NOT NULL,
             created_at DATETIME NOT NULL
+        )
+        
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS attraction_details (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            attraction_id INTEGER NOT NULL,
+            opening_hours TEXT,
+            address TEXT,
+            ticket_info TEXT,
+            official_url TEXT,
+            tips TEXT,
+            FOREIGN KEY (attraction_id) REFERENCES attractions(id)
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS attraction_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            attraction_id INTEGER NOT NULL,
+            event_name TEXT NOT NULL,
+            event_date TEXT,
+            event_description TEXT,
+            FOREIGN KEY (attraction_id) REFERENCES attractions(id)
         )
     """)
     conn.commit()
@@ -128,23 +154,96 @@ def get_attractions():
     return jsonify({"message": "資料讀取成功", "attractions": attractions}), 200
 
 
-# 讀取單筆資料
+# 讀取單筆資料（連同關聯的詳細資訊與活動）
 @app.route("/attractions/<int:id>", methods=["GET"])
 def search_attractions(id):
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    # 先查主資料，確認景點是否存在
+    cursor.execute(
+        "SELECT id, name, district, category, image_url, description, created_at FROM attractions WHERE id=?",
+        (id,),
+    )
+    result = cursor.fetchone()
+    if not result:
+        conn.close()
+        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
+
+    attraction = {
+        "id": result[0],
+        "name": result[1],
+        "district": result[2],
+        "category": result[3],
+        "image_url": result[4],
+        "description": result[5],
+        "created_at": result[6],
+    }
+
+    # 查 attraction_details（1對1，用 fetchone）
+    cursor.execute(
+        "SELECT opening_hours, address, ticket_info, official_url, tips FROM attraction_details WHERE attraction_id=?",
+        (id,),
+    )
+    detail_row = cursor.fetchone()
+    details = None
+    if detail_row:
+        details = {
+            "opening_hours": detail_row[0],
+            "address": detail_row[1],
+            "ticket_info": detail_row[2],
+            "official_url": detail_row[3],
+            "tips": detail_row[4],
+        }
+
+    # 查 attraction_events（1對多，用 fetchall）
+    cursor.execute(
+        "SELECT event_name, event_date, event_description FROM attraction_events WHERE attraction_id=?",
+        (id,),
+    )
+    event_rows = cursor.fetchall()
+    events = []
+    for row in event_rows:
+        events.append(
+            {
+                "event_name": row[0],
+                "event_date": row[1],
+                "event_description": row[2],
+            }
+        )
+
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "ok",
+                "attraction": attraction,
+                "details": details,
+                "events": events,
+            }
+        ),
+        200,
+    )
+
+
+# 讀取資料(名字)
+@app.route("/attractions/<string:name>")
+def find_name(name):
     # 連線資料庫
     conn = sqlite3.connect("attractions.db")
     cursor = conn.cursor()
 
     # 確認更新產品是否存在(id是否存在)
     cursor.execute(
-        "SELECT id, name, district, category, image_url, description, created_at FROM attractions WHERE id=?",
-        (id,),
+        "SELECT id, name, district, category, image_url, description, created_at FROM attractions WHERE name=?",
+        (name,),
     )
     # fetchone():找到第一筆符合的資料
     result = cursor.fetchone()
     if not result:
         conn.close()
-        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
+        return jsonify({"error": "景點名稱不存在，請使用其他id"}), 400
     conn.commit()
     conn.close()
 
@@ -389,6 +488,571 @@ def delete_attraction(id):
                     "description": result[5],
                     "created_at": result[6],
                 },
+            }
+        ),
+        200,
+    )
+
+
+### ---------------------- attraction_details CRUD ---------------------- ###
+
+
+# 新增景點詳細資訊
+@app.route("/attractions/<int:id>/details", methods=["POST"])
+def add_attraction_details(id):
+    try:
+        data = request.get_json(force=False)
+        if data is None:
+            raise ValueError
+    except Exception:
+        return jsonify({"error": "請傳送正確的json格式"}), 400
+
+    opening_hours = data.get("opening_hours")
+    address = data.get("address")
+    ticket_info = data.get("ticket_info")
+    official_url = data.get("official_url")
+    tips = data.get("tips")
+
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    # 確認景點是否存在
+    cursor.execute("SELECT id FROM attractions WHERE id=?", (id,))
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
+
+    # 確認是否已經有詳細資訊（1對1，避免重複新增）
+    cursor.execute("SELECT id FROM attraction_details WHERE attraction_id=?", (id,))
+    if cursor.fetchone():
+        conn.close()
+        return jsonify({"error": "這個景點已經有詳細資訊了，請改用PUT/PATCH更新"}), 400
+
+    cursor.execute(
+        """INSERT INTO attraction_details
+           (attraction_id, opening_hours, address, ticket_info, official_url, tips)
+           VALUES (?, ?, ?, ?, ?, ?)""",
+        (id, opening_hours, address, ticket_info, official_url, tips),
+    )
+    conn.commit()
+    detail_id = cursor.lastrowid
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "新增成功",
+                "details": {
+                    "id": detail_id,
+                    "attraction_id": id,
+                    "opening_hours": opening_hours,
+                    "address": address,
+                    "ticket_info": ticket_info,
+                    "official_url": official_url,
+                    "tips": tips,
+                },
+            }
+        ),
+        200,
+    )
+
+
+# 讀取單一景點的詳細資訊
+@app.route("/attractions/<int:id>/details", methods=["GET"])
+def get_attraction_details(id):
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id FROM attractions WHERE id=?", (id,))
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
+
+    cursor.execute(
+        "SELECT id, opening_hours, address, ticket_info, official_url, tips FROM attraction_details WHERE attraction_id=?",
+        (id,),
+    )
+    result = cursor.fetchone()
+    conn.close()
+
+    if not result:
+        return jsonify({"error": "這個景點還沒有詳細資訊"}), 400
+
+    return (
+        jsonify(
+            {
+                "message": "ok",
+                "details": {
+                    "id": result[0],
+                    "attraction_id": id,
+                    "opening_hours": result[1],
+                    "address": result[2],
+                    "ticket_info": result[3],
+                    "official_url": result[4],
+                    "tips": result[5],
+                },
+            }
+        ),
+        200,
+    )
+
+
+# 修改景點詳細資訊(整筆覆蓋)
+@app.route("/attractions/<int:id>/details", methods=["PUT"])
+def update_attraction_details(id):
+    try:
+        data = request.get_json(force=False)
+        if data is None:
+            raise ValueError
+    except Exception:
+        return jsonify({"error": "請傳送正確的json格式"}), 400
+
+    opening_hours = data.get("opening_hours")
+    address = data.get("address")
+    ticket_info = data.get("ticket_info")
+    official_url = data.get("official_url")
+    tips = data.get("tips")
+
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id FROM attraction_details WHERE attraction_id=?", (id,))
+    result = cursor.fetchone()
+    if not result:
+        conn.close()
+        return jsonify({"error": "這個景點還沒有詳細資訊，請先用POST新增"}), 400
+
+    cursor.execute(
+        """UPDATE attraction_details
+           SET opening_hours=?, address=?, ticket_info=?, official_url=?, tips=?
+           WHERE attraction_id=?""",
+        (opening_hours, address, ticket_info, official_url, tips, id),
+    )
+    conn.commit()
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "更新成功",
+                "details": {
+                    "id": result[0],
+                    "attraction_id": id,
+                    "opening_hours": opening_hours,
+                    "address": address,
+                    "ticket_info": ticket_info,
+                    "official_url": official_url,
+                    "tips": tips,
+                },
+            }
+        ),
+        200,
+    )
+
+
+# 修改景點詳細資訊(部分欄位)
+@app.route("/attractions/<int:id>/details", methods=["PATCH"])
+def change_attraction_details(id):
+    try:
+        data = request.get_json(force=False)
+        if data is None:
+            raise ValueError
+    except Exception:
+        return jsonify({"error": "請傳送正確的json格式"}), 400
+
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id, opening_hours, address, ticket_info, official_url, tips FROM attraction_details WHERE attraction_id=?",
+        (id,),
+    )
+    result = cursor.fetchone()
+    if not result:
+        conn.close()
+        return jsonify({"error": "這個景點還沒有詳細資訊，請先用POST新增"}), 400
+
+    final_opening_hours = data.get("opening_hours", result[1])
+    final_address = data.get("address", result[2])
+    final_ticket_info = data.get("ticket_info", result[3])
+    final_official_url = data.get("official_url", result[4])
+    final_tips = data.get("tips", result[5])
+
+    cursor.execute(
+        """UPDATE attraction_details
+           SET opening_hours=?, address=?, ticket_info=?, official_url=?, tips=?
+           WHERE attraction_id=?""",
+        (
+            final_opening_hours,
+            final_address,
+            final_ticket_info,
+            final_official_url,
+            final_tips,
+            id,
+        ),
+    )
+    conn.commit()
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "更新成功",
+                "details": {
+                    "id": result[0],
+                    "attraction_id": id,
+                    "opening_hours": final_opening_hours,
+                    "address": final_address,
+                    "ticket_info": final_ticket_info,
+                    "official_url": final_official_url,
+                    "tips": final_tips,
+                },
+            }
+        ),
+        200,
+    )
+
+
+# 刪除景點詳細資訊
+@app.route("/attractions/<int:id>/details", methods=["DELETE"])
+def delete_attraction_details(id):
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id, opening_hours, address, ticket_info, official_url, tips FROM attraction_details WHERE attraction_id=?",
+        (id,),
+    )
+    result = cursor.fetchone()
+    if not result:
+        conn.close()
+        return jsonify({"error": "這個景點還沒有詳細資訊"}), 400
+
+    cursor.execute("DELETE FROM attraction_details WHERE attraction_id=?", (id,))
+    conn.commit()
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "刪除成功",
+                "details": {
+                    "id": result[0],
+                    "attraction_id": id,
+                    "opening_hours": result[1],
+                    "address": result[2],
+                    "ticket_info": result[3],
+                    "official_url": result[4],
+                    "tips": result[5],
+                },
+            }
+        ),
+        200,
+    )
+
+
+### ---------------------- attraction_events CRUD ---------------------- ###
+
+
+# 新增景點活動
+@app.route("/attractions/<int:id>/events", methods=["POST"])
+def add_attraction_event(id):
+    try:
+        data = request.get_json(force=False)
+        if data is None:
+            raise ValueError
+    except Exception:
+        return jsonify({"error": "請傳送正確的json格式"}), 400
+
+    event_name = data.get("event_name")
+    event_date = data.get("event_date")
+    event_description = data.get("event_description")
+
+    if not event_name:
+        return jsonify({"error": "請傳送完整的活動資訊(event_name必填)"}), 400
+    if not isinstance(event_name, str):
+        return jsonify({"error": "活動名稱必須是文字格式"}), 400
+
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    # 確認景點是否存在
+    cursor.execute("SELECT id FROM attractions WHERE id=?", (id,))
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
+
+    cursor.execute(
+        """INSERT INTO attraction_events
+           (attraction_id, event_name, event_date, event_description)
+           VALUES (?, ?, ?, ?)""",
+        (id, event_name, event_date, event_description),
+    )
+    conn.commit()
+    event_id = cursor.lastrowid
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "新增成功",
+                "event": {
+                    "id": event_id,
+                    "attraction_id": id,
+                    "event_name": event_name,
+                    "event_date": event_date,
+                    "event_description": event_description,
+                },
+            }
+        ),
+        200,
+    )
+
+
+# 讀取單一景點底下的所有活動
+@app.route("/attractions/<int:id>/events", methods=["GET"])
+def get_attraction_events(id):
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id FROM attractions WHERE id=?", (id,))
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
+
+    cursor.execute(
+        "SELECT id, event_name, event_date, event_description FROM attraction_events WHERE attraction_id=?",
+        (id,),
+    )
+    rows = cursor.fetchall()
+    conn.close()
+
+    events = [
+        {
+            "id": row[0],
+            "attraction_id": id,
+            "event_name": row[1],
+            "event_date": row[2],
+            "event_description": row[3],
+        }
+        for row in rows
+    ]
+
+    return jsonify({"message": "ok", "events": events}), 200
+
+
+# 修改單一活動(整筆覆蓋)
+@app.route("/attractions/<int:id>/events/<int:event_id>", methods=["PUT"])
+def update_attraction_event(id, event_id):
+    try:
+        data = request.get_json(force=False)
+        if data is None:
+            raise ValueError
+    except Exception:
+        return jsonify({"error": "請傳送正確的json格式"}), 400
+
+    event_name = data.get("event_name")
+    event_date = data.get("event_date")
+    event_description = data.get("event_description")
+
+    if not event_name:
+        return jsonify({"error": "請傳送完整的活動資訊(event_name必填)"}), 400
+    if not isinstance(event_name, str):
+        return jsonify({"error": "活動名稱必須是文字格式"}), 400
+
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id FROM attraction_events WHERE id=? AND attraction_id=?",
+        (event_id, id),
+    )
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({"error": "活動不存在，請確認id"}), 400
+
+    cursor.execute(
+        """UPDATE attraction_events
+           SET event_name=?, event_date=?, event_description=?
+           WHERE id=? AND attraction_id=?""",
+        (event_name, event_date, event_description, event_id, id),
+    )
+    conn.commit()
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "更新成功",
+                "event": {
+                    "id": event_id,
+                    "attraction_id": id,
+                    "event_name": event_name,
+                    "event_date": event_date,
+                    "event_description": event_description,
+                },
+            }
+        ),
+        200,
+    )
+
+
+# 修改單一活動(部分欄位)
+@app.route("/attractions/<int:id>/events/<int:event_id>", methods=["PATCH"])
+def change_attraction_event(id, event_id):
+    try:
+        data = request.get_json(force=False)
+        if data is None:
+            raise ValueError
+    except Exception:
+        return jsonify({"error": "請傳送正確的json格式"}), 400
+
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id, event_name, event_date, event_description FROM attraction_events WHERE id=? AND attraction_id=?",
+        (event_id, id),
+    )
+    result = cursor.fetchone()
+    if not result:
+        conn.close()
+        return jsonify({"error": "活動不存在，請確認id"}), 400
+
+    event_name = data.get("event_name")
+    if event_name is not None and not isinstance(event_name, str):
+        conn.close()
+        return jsonify({"error": "活動名稱必須是文字格式"}), 400
+
+    final_event_name = event_name if event_name is not None else result[1]
+    final_event_date = data.get("event_date", result[2])
+    final_event_description = data.get("event_description", result[3])
+
+    cursor.execute(
+        """UPDATE attraction_events
+           SET event_name=?, event_date=?, event_description=?
+           WHERE id=? AND attraction_id=?""",
+        (final_event_name, final_event_date, final_event_description, event_id, id),
+    )
+    conn.commit()
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "更新成功",
+                "event": {
+                    "id": event_id,
+                    "attraction_id": id,
+                    "event_name": final_event_name,
+                    "event_date": final_event_date,
+                    "event_description": final_event_description,
+                },
+            }
+        ),
+        200,
+    )
+
+
+# 刪除單一活動
+@app.route("/attractions/<int:id>/events/<int:event_id>", methods=["DELETE"])
+def delete_attraction_event(id, event_id):
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id, event_name, event_date, event_description FROM attraction_events WHERE id=? AND attraction_id=?",
+        (event_id, id),
+    )
+    result = cursor.fetchone()
+    if not result:
+        conn.close()
+        return jsonify({"error": "活動不存在，請確認id"}), 400
+
+    cursor.execute(
+        "DELETE FROM attraction_events WHERE id=? AND attraction_id=?", (event_id, id)
+    )
+    conn.commit()
+    conn.close()
+
+    return (
+        jsonify(
+            {
+                "message": "刪除成功",
+                "event": {
+                    "id": result[0],
+                    "attraction_id": id,
+                    "event_name": result[1],
+                    "event_date": result[2],
+                    "event_description": result[3],
+                },
+            }
+        ),
+        200,
+    )
+
+
+### ---------------------- 旅遊人次統計 (做法B: 模擬資料) ---------------------- ###
+
+
+# 依照 (景點id, 年月) 產生固定的模擬人次，這樣同一個景點同一個月每次呼叫API都會拿到一樣的數字，
+# 而不是每次重新整理都亂跳，比較像真實資料
+def generate_fake_visitor_count(attraction_id, year_month):
+    seed_str = f"{attraction_id}-{year_month}"
+    rnd = random.Random(seed_str)
+    return rnd.randint(500, 3000)
+
+
+# 依照結束月份往前推 n 個月，回傳 ["2026-03", "2026-04", ... , "2026-08"] 這種格式(由舊到新)
+def get_last_n_months(n):
+    today = date.today()
+    labels = []
+    year = today.year
+    month = today.month
+    for i in range(n - 1, -1, -1):
+        m = month - i
+        y = year
+        while m <= 0:
+            m += 12
+            y -= 1
+        labels.append(f"{y}-{m:02d}")
+    return labels
+
+
+# 統計旅遊人次(近一個月/三個月/半年)
+@app.route("/attractions/<int:id>/stats", methods=["GET"])
+def get_attraction_stats(id):
+    # range 參數: 1m / 3m / 6m，預設 1m
+    range_param = request.args.get("range", "1m")
+    range_map = {"1m": 1, "3m": 3, "6m": 6}
+
+    if range_param not in range_map:
+        return jsonify({"error": "range參數只能是1m、3m或6m"}), 400
+
+    conn = sqlite3.connect("attractions.db")
+    cursor = conn.cursor()
+
+    # 確認景點是否存在
+    cursor.execute("SELECT id, name FROM attractions WHERE id=?", (id,))
+    result = cursor.fetchone()
+    conn.close()
+    if not result:
+        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
+
+    months = get_last_n_months(range_map[range_param])
+    counts = [generate_fake_visitor_count(id, month) for month in months]
+
+    return (
+        jsonify(
+            {
+                "message": "ok",
+                "attraction_id": id,
+                "attraction_name": result[1],
+                "range": range_param,
+                "labels": months,
+                "counts": counts,
+                "total": sum(counts),
+                "average": round(sum(counts) / len(counts)),
             }
         ),
         200,
