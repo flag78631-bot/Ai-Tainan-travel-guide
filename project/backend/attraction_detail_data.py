@@ -1,6 +1,6 @@
 attraction_detail_data = [
     {
-        "attraction_id": 2,
+        "attraction_id": 40,
         "opening_hours": "08:30-21:30",
         "address": "台南市中西區民族路二段212號",
         "ticket_info": "全票70元、半票35元（台南市市民憑身分證免費）",

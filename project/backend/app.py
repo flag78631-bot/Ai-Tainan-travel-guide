@@ -494,9 +494,6 @@ def delete_attraction(id):
     )
 
 
-### ---------------------- attraction_details CRUD ---------------------- ###
-
-
 # 新增景點詳細資訊
 @app.route("/attractions/<int:id>/details", methods=["POST"])
 def add_attraction_details(id):
@@ -751,9 +748,6 @@ def delete_attraction_details(id):
     )
 
 
-### ---------------------- attraction_events CRUD ---------------------- ###
-
-
 # 新增景點活動
 @app.route("/attractions/<int:id>/events", methods=["POST"])
 def add_attraction_event(id):
@@ -986,73 +980,6 @@ def delete_attraction_event(id, event_id):
                     "event_date": result[2],
                     "event_description": result[3],
                 },
-            }
-        ),
-        200,
-    )
-
-
-### ---------------------- 旅遊人次統計 (做法B: 模擬資料) ---------------------- ###
-
-
-# 依照 (景點id, 年月) 產生固定的模擬人次，這樣同一個景點同一個月每次呼叫API都會拿到一樣的數字，
-# 而不是每次重新整理都亂跳，比較像真實資料
-def generate_fake_visitor_count(attraction_id, year_month):
-    seed_str = f"{attraction_id}-{year_month}"
-    rnd = random.Random(seed_str)
-    return rnd.randint(500, 3000)
-
-
-# 依照結束月份往前推 n 個月，回傳 ["2026-03", "2026-04", ... , "2026-08"] 這種格式(由舊到新)
-def get_last_n_months(n):
-    today = date.today()
-    labels = []
-    year = today.year
-    month = today.month
-    for i in range(n - 1, -1, -1):
-        m = month - i
-        y = year
-        while m <= 0:
-            m += 12
-            y -= 1
-        labels.append(f"{y}-{m:02d}")
-    return labels
-
-
-# 統計旅遊人次(近一個月/三個月/半年)
-@app.route("/attractions/<int:id>/stats", methods=["GET"])
-def get_attraction_stats(id):
-    # range 參數: 1m / 3m / 6m，預設 1m
-    range_param = request.args.get("range", "1m")
-    range_map = {"1m": 1, "3m": 3, "6m": 6}
-
-    if range_param not in range_map:
-        return jsonify({"error": "range參數只能是1m、3m或6m"}), 400
-
-    conn = sqlite3.connect("attractions.db")
-    cursor = conn.cursor()
-
-    # 確認景點是否存在
-    cursor.execute("SELECT id, name FROM attractions WHERE id=?", (id,))
-    result = cursor.fetchone()
-    conn.close()
-    if not result:
-        return jsonify({"error": "景點id不存在，請使用其他id"}), 400
-
-    months = get_last_n_months(range_map[range_param])
-    counts = [generate_fake_visitor_count(id, month) for month in months]
-
-    return (
-        jsonify(
-            {
-                "message": "ok",
-                "attraction_id": id,
-                "attraction_name": result[1],
-                "range": range_param,
-                "labels": months,
-                "counts": counts,
-                "total": sum(counts),
-                "average": round(sum(counts) / len(counts)),
             }
         ),
         200,

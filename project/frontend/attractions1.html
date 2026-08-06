@@ -142,6 +142,30 @@
             color: rgba(43, 38, 32, .4);
         }
 
+        .page-size-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            color: rgba(43, 38, 32, .6);
+        }
+
+        .page-size-box select {
+            padding: 8px 12px;
+            font-family: "Noto Sans TC", sans-serif;
+            font-size: 13.5px;
+            border: 1px solid rgba(43, 38, 32, .18);
+            border-radius: 20px;
+            background: var(--paper);
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        .page-size-box select:focus {
+            outline: none;
+            border-color: var(--indigo);
+        }
+
         @media (max-width: 640px) {
             .search-box {
                 max-width: none;
@@ -333,6 +357,48 @@
                 display: block;
             }
         }
+
+        .pagination-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13.5px;
+            font-weight: 500;
+            border: 1px solid rgba(43, 38, 32, .18);
+            border-radius: 6px;
+            background: #fff;
+            color: var(--ink);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .page-btn:hover {
+            border-color: var(--vermilion);
+            color: var(--vermilion);
+        }
+
+        .page-btn.active {
+            background: var(--vermilion);
+            border-color: var(--vermilion);
+            color: var(--paper);
+        }
+
+        .page-btn.disabled {
+            opacity: .35;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -364,16 +430,29 @@
             <button class="cat-btn" data-category="美食">美食</button>
             <button class="cat-btn" data-category="熱門景點">熱門景點</button>
             <button class="cat-btn" data-category="自然景觀">自然景觀</button>
+
+            <div class="page-size-box">
+                <label for="pselect">每頁顯示</label>
+                <select id="pselect">
+                    <option value="3">3</option>
+                    <option value="6" selected>6</option>
+                    <option value="9">9</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="輸入想去的景點名稱">
             </div>
-        </div>
+    </section>
+
+    </div>
     </section>
 
     <section class="list-section">
         <div class="wrap">
             <div class="result-meta" id="resultMeta"></div>
             <div class="card-grid" id="bd"></div>
+            <div class="pagination-bar" id="pagination"></div>
         </div>
     </section>
 
@@ -395,6 +474,9 @@
         let cleandata = [];
         let currentCategory = "全部";
         let currentKeyword = "";
+        let currentPage = 1;
+        let pageSize = Number($("#pselect").val());
+        let filteredData = [];
 
         $(function () {
             $.ajax({
@@ -457,6 +539,25 @@
                 currentKeyword = $(this).val().trim();
                 applyFilters();
             });
+
+            $("#pagination").on("click", ".page-btn", function () {
+                let page = Number($(this).data("page"));
+                let totalPage = Math.ceil(filteredData.length / pageSize);
+
+                if (page < 1 || page > totalPage) return;
+
+                currentPage = page;
+                renderPage();
+
+                // 換頁後捲回列表頂端，體驗比較好
+                $('html, body').animate({ scrollTop: $(".list-section").offset().top - 100 }, 300);
+            });
+            // 監聽每頁顯示筆數
+            $("#pselect").on("change", function () {
+                pageSize = Number($(this).val());
+                currentPage = 1;   // 改變每頁筆數時也要跳回第一頁，避免頁碼超出範圍
+                renderPage();
+            });
         });
 
         function applyFilters() {
@@ -469,11 +570,23 @@
                 filtered = filtered.filter(item => item.name.includes(currentKeyword));
             }
 
-            renderCards(filtered);
+            filteredData = filtered;
+            currentPage = 1;   // 换分類或搜尋時一律跳回第一頁
+            renderPage();
+        }
+
+        function renderPage() {
+            $("#resultMeta").html(`共 <strong>${filteredData.length}</strong> 個景點`);
+
+            let start = (currentPage - 1) * pageSize;
+            let end = start + pageSize;
+            let pageData = filteredData.slice(start, end);
+
+            renderCards(pageData);
+            renderPagination();
         }
 
         function renderCards(data) {
-            $("#resultMeta").html(`共 <strong>${data.length}</strong> 個景點`);
             $("#bd").empty();
 
             if (data.length === 0) {
@@ -483,17 +596,34 @@
 
             data.forEach(function (item) {
                 let strHTML = `<div class="place-card">
-                    <div class="thumb"><img src="${item.image_url}" alt="${item.name}"></div>
-                    <div class="body">
-                        <span class="place-tag">${item.category}</span>
-                        <h3>${item.name}</h3>
-                        <p>${item.description}</p>
-                        <span class="place-district">${item.district}</span>
-                        <a href="detail1.html?id=${item.id}" class="view-link">查看詳細 →</a>
-                    </div>
-                </div>`;
+            <div class="thumb"><img src="${item.image_url}" alt="${item.name}"></div>
+            <div class="body">
+                <span class="place-tag">${item.category}</span>
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <span class="place-district">${item.district}</span>
+                <a href="detail1.html?id=${item.id}" class="view-link">查看詳細 →</a>
+            </div>
+        </div>`;
                 $("#bd").append(strHTML);
             });
+        }
+        function renderPagination() {
+            let totalPage = Math.ceil(filteredData.length / pageSize);
+            $("#pagination").empty();
+
+            if (totalPage <= 1) return;   // 只有一頁就不顯示分頁列
+
+            let strHTML = "";
+            strHTML += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">‹ 上一頁</button>`;
+
+            for (let i = 1; i <= totalPage; i++) {
+                strHTML += `<button class="page-btn ${currentPage === i ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+
+            strHTML += `<button class="page-btn ${currentPage === totalPage ? 'disabled' : ''}" data-page="${currentPage + 1}">下一頁 ›</button>`;
+
+            $("#pagination").html(strHTML);
         }
     </script>
 

@@ -325,6 +325,13 @@
             }
         }
 
+        .chart-wrap {
+            position: relative;
+            height: 320px;
+            /* 你想要的圖表高度，自己調整這個數字 */
+            width: 100%;
+        }
+
         /* ---------- FOOTER ---------- */
         footer {
             background: var(--indigo-deep);
@@ -480,6 +487,14 @@
                 </tbody>
             </table>
         </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">各分類景點數量分布</h5>
+                <div class="chart-wrap">
+                    <canvas id="districtChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -495,6 +510,8 @@
     </footer>
 
     <script src="js/jquery-4.0.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
     <script>
         const API_BASE = "http://192.168.60.11:5000/attractions";
         let allData = [];
@@ -544,6 +561,7 @@
                 success: function (data) {
                     allData = data.attractions || [];
                     renderTable();
+                    renderChart();   // 表格跟圖表用同一份資料，不用再打第二次 API
                 },
                 error: function () {
                     $("#tableBody").html('<tr class="empty-row"><td colspan="6">資料讀取失敗，請確認後端伺服器是否啟動</td></tr>');
@@ -562,18 +580,79 @@
             $("#tableBody").empty();
             allData.forEach(function (item) {
                 let row = `<tr>
-                    <td class="thumb-cell"><img src="${item.image_url || ''}" alt="${item.name || ''}"></td>
-                    <td class="name-cell">${item.name || '未提供名稱'}</td>
-                    <td>${item.district || '未提供地址'}</td>
-                    <td><span class="cat-pill">${item.category || '未分類'}</span></td>
-                    <td>${(item.description || '').slice(0, 24)}${(item.description || '').length > 24 ? '…' : ''}</td>
-                    <td class="action-cell">
-                        <button class="btn btn-outline btn-sm edit-btn" data-id="${item.id}">編輯</button>
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="${item.id}">刪除</button>
-                    </td>
-                </tr>`;
+                <td class="thumb-cell"><img src="${item.image_url || ''}" alt="${item.name || ''}"></td>
+                <td class="name-cell">${item.name || '未提供名稱'}</td>
+                <td>${item.district || '未提供地址'}</td>
+                <td><span class="cat-pill">${item.category || '未分類'}</span></td>
+                <td>${(item.description || '').slice(0, 24)}${(item.description || '').length > 24 ? '…' : ''}</td>
+                <td class="action-cell">
+                    <button class="btn btn-outline btn-sm edit-btn" data-id="${item.id}">編輯</button>
+                    <button class="btn btn-danger btn-sm delete-btn" data-id="${item.id}">刪除</button>
+                </td>
+            </tr>`;
                 $("#tableBody").append(row);
             });
+        }
+
+        let districtChartInstance = null;   // 記住圖表實例，避免重複渲染時疊圖
+
+        function renderChart() {
+            // 資料重構：以 category 分組計數
+            const counter = {};
+            const regionTitle = [];
+            const regionData = [];
+
+            allData.forEach(function (item) {
+                const category = item.category;
+                if (counter[category] === undefined) {
+                    counter[category] = regionData.length;
+                    regionData.push([]);
+                    regionTitle[counter[category]] = category;
+                }
+                regionData[counter[category]].push(item);
+            });
+
+            const label_x = regionTitle;
+            const data_y = regionData.map(item => item.length);
+
+            const ctx = document.getElementById("districtChart");
+
+            // 如果圖表已經存在（例如新增/刪除資料後重新載入），先銷毀舊的再畫新的
+            if (districtChartInstance) {
+                districtChartInstance.destroy();
+            }
+
+            districtChartInstance = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: label_x,
+                    datasets: [{
+                        label: "景點數量",
+                        data: data_y,
+                        backgroundColor: "rgba(179, 59, 46, 0.75)",
+                        borderColor: "#B33B2E",
+                        borderWidth: 1,
+                        borderRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    devicePixelRatio: window.devicePixelRatio || 2,   // 加這行，確保用螢幕實際的像素密度畫圖
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    }
+                }
+            });
+
+            // 加這行：容器尺寸穩定後，強制圖表重新計算一次解析度
+            setTimeout(() => districtChartInstance.resize(), 0);
         }
 
         function openForm(mode, item) {
@@ -700,6 +779,7 @@
             });
         }
     </script>
+
 </body>
 
 </html>
