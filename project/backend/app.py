@@ -986,6 +986,31 @@ def delete_attraction_event(id, event_id):
     )
 
 
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin"
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    try:
+        data = request.get_json(force=False)
+        if data is None:
+            raise ValueError
+    except Exception:
+        return jsonify({"error": "請傳送正確的json格式"}), 400
+
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"error": "請輸入帳號與密碼"}), 400
+
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        return jsonify({"message": "登入成功"}), 200
+    else:
+        return jsonify({"error": "帳號或密碼錯誤"}), 401
+
+
 @app.route("/test")
 def test():
     return jsonify({"message": "sever is working"})

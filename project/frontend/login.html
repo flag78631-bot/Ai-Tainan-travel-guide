@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台南旅遊巡禮｜管理員登入</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/navbar.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Noto Sans TC", sans-serif;
+            background: var(--indigo-deep);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.7;
+        }
+
+        h1 {
+            font-family: "Noto Serif TC", serif;
+        }
+
+        .login-card {
+            background: var(--paper);
+            width: 100%;
+            max-width: 400px;
+            margin: 24px;
+            border-radius: 8px;
+            padding: 44px 38px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+        }
+
+        .login-brand {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--indigo-deep);
+            letter-spacing: 2px;
+        }
+
+        .login-brand span {
+            color: var(--vermilion);
+        }
+
+        .login-sub {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(43, 38, 32, .55);
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(43, 38, 32, .7);
+            margin-bottom: 6px;
+            letter-spacing: .5px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 11px 14px;
+            font-family: "Noto Sans TC", sans-serif;
+            font-size: 14px;
+            border: 1px solid rgba(43, 38, 32, .2);
+            border-radius: 3px;
+            background: #fff;
+            color: var(--ink);
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: var(--indigo);
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 13px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: var(--vermilion);
+            color: var(--paper);
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .login-btn:hover {
+            background: #96301F;
+        }
+
+        .login-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .login-msg {
+            margin-top: 16px;
+            font-size: 13.5px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 3px;
+            display: none;
+        }
+
+        .login-msg.show {
+            display: block;
+        }
+
+        .login-msg.error {
+            background: rgba(179, 59, 46, .08);
+            color: var(--vermilion);
+        }
+
+        .login-msg.success {
+            background: rgba(22, 50, 79, .08);
+            color: var(--indigo-deep);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: rgba(43, 38, 32, .5);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--indigo);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <div class="login-brand">府城<span>巡</span>禮</div>
+        <div class="login-sub">ADMIN LOGIN</div>
+
+        <form id="loginForm">
+            <div class="field">
+                <label for="username">帳號</label>
+                <input type="text" id="username" autocomplete="username">
+            </div>
+            <div class="field">
+                <label for="password">密碼</label>
+                <input type="password" id="password" autocomplete="current-password">
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn">登入</button>
+            <div class="login-msg" id="loginMsg"></div>
+        </form>
+
+        <a href="index.html" class="back-link">← 回首頁</a>
+    </div>
+
+    <script src="js/jquery-4.0.0.js"></script>
+    <script>
+        const API_BASE = "http://192.168.60.11:5000";
+
+        $(function () {
+            // 如果已經登入過（sessionStorage 有標記），直接跳去管理頁，不用重複登入
+            if (sessionStorage.getItem("isAdmin") === "true") {
+                window.location.href = "admin.html";
+                return;
+            }
+
+            $("#loginForm").on("submit", function (e) {
+                e.preventDefault();
+                doLogin();
+            });
+        });
+
+        function doLogin() {
+            const username = $("#username").val().trim();
+            const password = $("#password").val();
+
+            hideMsg();
+
+            if (!username || !password) {
+                showMsg("請輸入帳號與密碼", "error");
+                return;
+            }
+
+            $("#loginBtn").prop("disabled", true).text("登入中...");
+
+            $.ajax({
+                type: "POST",
+                url: `${API_BASE}/login`,
+                contentType: "application/json",
+                data: JSON.stringify({ username: username, password: password }),
+                dataType: "json",
+                success: function () {
+                    // 登入成功：用 sessionStorage 記住登入狀態（關掉分頁就會失效，比 localStorage 安全）
+                    sessionStorage.setItem("isAdmin", "true");
+                    showMsg("登入成功，正在跳轉...", "success");
+                    setTimeout(function () {
+                        window.location.href = "admin.html";
+                    }, 500);
+                },
+                error: function (xhr) {
+                    const msg = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : "登入失敗，請稍後再試";
+                    showMsg(msg, "error");
+                    $("#loginBtn").prop("disabled", false).text("登入");
+                }
+            });
+        }
+
+        function showMsg(text, type) {
+            $("#loginMsg").text(text).removeClass("success error").addClass("show " + type);
+        }
+
+        function hideMsg() {
+            $("#loginMsg").removeClass("show success error").text("");
+        }
+    </script>
+</body>
+
+</html>

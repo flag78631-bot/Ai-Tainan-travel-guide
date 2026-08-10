@@ -420,7 +420,10 @@
     <div class="wrap">
         <div class="toolbar">
             <div class="count" id="countText">共 0 筆景點</div>
-            <button class="btn btn-primary" id="addBtn">＋ 新增景點</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-primary" id="addBtn">＋ 新增景點</button>
+                <button class="btn btn-outline" id="logoutBtn">登出</button>
+            </div>
         </div>
 
         <div class="form-panel" id="formPanel">
@@ -517,11 +520,21 @@
         let allData = [];
         let isEditMode = false;
 
+        // 進入頁面前先檢查登入狀態，沒登入就導回登入頁（直接打網址進來也擋得住）
+        if (sessionStorage.getItem("isAdmin") !== "true") {
+            window.location.href = "login.html";
+        }
+
         $(function () {
             loadData();
 
             $("#addBtn").on("click", function () {
                 openForm("add");
+            });
+
+            $("#logoutBtn").on("click", function () {
+                sessionStorage.removeItem("isAdmin");
+                window.location.href = "login.html";
             });
 
             $("#cancelBtn").on("click", function () {

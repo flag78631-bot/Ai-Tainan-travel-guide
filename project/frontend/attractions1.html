@@ -409,7 +409,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">首頁</a></li>
                 <li><a href="attractions1.html" class="active">景點列表</a></li>
-                <li><a href="admin.html">管理頁面</a></li>
+                <li><a href="admin.html" class="admin-link">管理頁面</a></li>
             </ul>
             <button class="nav-toggle" id="navToggle">☰</button>
         </div>
@@ -440,6 +440,9 @@
                     <option value="12">12</option>
                 </select>
             </div>
+
+            <a href="admin.html" class="cat-btn admin-link">前往管理頁面</a>
+
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="輸入想去的景點名稱">
             </div>
@@ -523,9 +526,28 @@
                 error: function (err) {
                     console.log(err);
                     $("#bd").html('<div class="empty-state">資料讀取失敗，請確認後端伺服器是否啟動</div>');
-                }
+                },
+
+
             });
 
+            $(function () {
+                // ... 原本的 ajax 讀取資料 ...
+
+                document.getElementById("navToggle").addEventListener("click", function () {
+                    document.getElementById("navLinks").classList.toggle("open");
+                });
+
+                // 點擊「管理頁面」時先檢查登入狀態，沒登入就攔截並導去登入頁
+                document.querySelectorAll(".admin-link").forEach(function (link) {
+                    link.addEventListener("click", function (e) {
+                        if (sessionStorage.getItem("isAdmin") !== "true") {
+                            e.preventDefault();
+                            window.location.href = "login.html";
+                        }
+                    });
+                });
+            });
             // 監聽分類按鈕
             $(".cat-btn").on("click", function () {
                 $(".cat-btn").removeClass("active");
