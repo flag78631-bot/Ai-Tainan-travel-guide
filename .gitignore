@@ -1,0 +1,14 @@
+# Python (backend)
+project/backend/venv/
+project/backend/__pycache__/
+project/backend/*.pyc
+
+# 資料庫檔案(如果是SQLite本機檔)
+project/backend/*.db
+project/backend/*.sqlite3
+
+# 環境變數/密鑰(如果有存API key之類)
+project/backend/.env
+
+# 編輯器設定
+.vscode/

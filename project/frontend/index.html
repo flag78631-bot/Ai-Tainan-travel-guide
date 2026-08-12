@@ -620,14 +620,14 @@
                 $("#card").empty();
                 data.forEach(function (item) {
                     let strHTML = `<div class="place-card">
-                    <div class="thumb"><img src="${item.image_url}" alt=""></div>
-                    <div class="body">
-                        <span class="place-tag">"${item.category}"</span>
-                        <h3>${item.name}</h3>
-                        <p>${item.description}</p>
-                        <span class="place-district">${item.district}</span>
-                    </div>
-                </div>`;
+                                    <div class="thumb"><img src="${item.image_url}" alt=""></div>
+                                    <div class="body">
+                                    <span class="place-tag">"${item.category}"</span>
+                                    <h3>${item.name}</h3>
+                                    <p>${item.description}</p>
+                                    <span class="place-district">${item.district}</span>
+                                    </div>
+                                </div>`;
                     $("#card").append(strHTML);
                 });
             }
