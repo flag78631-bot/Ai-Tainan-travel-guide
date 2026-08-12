@@ -33,39 +33,39 @@
 
 #### 首頁
 
-![首頁畫面](docs/screenshots/home.png)
+![首頁畫面](docs/screenshot/home.png)
 
 #### 景點列表
 
-![景點列表畫面](docs/screenshots/attractions.png)
+![景點列表畫面](docs/screenshot/attractions.png)
 
 #### 景點詳細
 
-![景點詳細畫面](docs/screenshots/details.png)
+![景點詳細畫面](docs/screenshot/details.png)
 
 #### 管理頁面
 
-![管理頁畫面 1](docs/screenshots/admin1.png)
+![管理頁畫面 1](docs/screenshot/admin1.png)
 
-![管理頁畫面 2](docs/screenshots/admin2.png)
+![管理頁畫面 2](docs/screenshot/admin2.png)
 
 #### 統計圖表
 
-![統計圖表畫面](docs/screenshots/cahrts.png)
+![統計圖表畫面](docs/screenshot/cahrts.png)
 
 ### RWD 檢查截圖
 
 #### 桌機寬度 1200px
 
-![桌機寬度 1200px](docs/screenshots/home.png)
+![桌機寬度 1200px](docs/screenshot/home.png)
 
 #### 平板寬度 768px
 
-![平板寬度 768px](docs/screenshots/rwd768.png)
+![平板寬度 768px](docs/screenshot/rwd768.png)
 
 #### 手機寬度 375px
 
-![手機寬度 375px](docs/screenshots/rwd375.png)
+![手機寬度 375px](docs/screenshot/rwd375.png)
 
 
 ## 資料庫設計說明
